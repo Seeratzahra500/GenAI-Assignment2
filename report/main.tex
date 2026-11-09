@@ -1,0 +1,96 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{booktabs,graphicx,amsmath,amssymb,cite,url,array,xcolor}
+\usepackage[T1]{fontenc}
+\graphicspath{{figures/}}
+% include generated fragments; show a visible TODO if one is missing
+\newcommand{\safeinput}[1]{\IfFileExists{generated/#1.tex}{\input{generated/#1.tex}}{\textbf{\color{red}[TODO: generated/#1.tex missing -- run src/report\_assets.py]}}}
+\newcommand{\safefig}[3]{\IfFileExists{figures/#1.pdf}{\includegraphics[width=#2]{#1}}{\textbf{\color{red}[TODO: figure #1 missing]}}}
+\newcommand{\todo}[1]{\textbf{\color{red}[TODO: #1]}}
+\newcommand{\sm}{\small}
+\begin{document}
+\title{Fine-Tuning a Small Decoder for Clinical-Trial Criterion Eligibility, with a From-Scratch KV Cache, Tiled Attention and Speculative Decoding}
+\author{\IEEEauthorblockN{Rida Zubair (23i-2590)}
+\IEEEauthorblockA{FAST-NUCES Islamabad, Generative AI -- Assignment 2\\
+Code: \url{https://github.com/Seeratzahra500/GenAI-Assignment2}}}
+\maketitle
+
+\begin{abstract}
+We fine-tune Qwen2.5-1.5B-Instruct with LoRA on the expert annotations of TrialGPT-Criterion-Annotations to predict, for a patient note and one trial criterion, an eligibility label and the supporting sentence IDs. Using a patient-grouped 37/8/8 split we compare the base and fine-tuned models with criterion-level metrics, and analyse errors. We also implement, and benchmark against references, a KV-cache decoder, a tiled online-softmax attention kernel, and greedy speculative decoding with a LoRA-tuned Qwen2.5-0.5B draft, and expose everything in a Gradio app. Fine-tuning raises validation accuracy from 0.107 to 0.752 and evidence micro-F1 from 0.128 to 0.525. Rare classes remain weak, and speculative decoding was slower than cached greedy decoding in our setting; we report both honestly. The prototype is educational and not a clinical decision tool.
+\end{abstract}
+
+\begin{IEEEkeywords}
+LoRA, clinical trial matching, KV cache, online softmax, speculative decoding
+\end{IEEEkeywords}
+
+\section{Introduction}
+Matching patients to clinical trials requires judging each inclusion and exclusion criterion against a free-text note. TrialGPT \cite{trialgpt} showed that LLMs can do this and released expert criterion-level annotations. We study whether a small open-weight decoder, adapted with LoRA \cite{lora} on a single 16~GB GPU, can learn the task, and we implement the decoding machinery (KV cache, tiled attention \cite{flash,milakov}, speculative decoding \cite{leviathan,chen}) ourselves so that every component can be verified against a reference.
+
+\section{Data and Split}
+We use only the expert columns (\texttt{expert\_eligibility}, \texttt{expert\_sentences}); the GPT-4 columns and the original \texttt{training} flag are never read. The dataset has 1015 criterion annotations from 53 patients. Patients (not rows) are split to avoid leakage: sorted unique patient IDs are shuffled with \texttt{numpy.random.default\_rng(42)} and divided 37/8/8, giving 603/206/206 annotations; assertions confirm that no patient appears in two splits and the manifest is committed. Table~\ref{tab:labels} shows the label distribution, which is strongly imbalanced: some classes have only 1--3 examples in validation and test, so per-class numbers are noisy. Prompts plus answers have at most 562 tokens (mean 267), so no truncation occurs at the 1024-token limit.
+\begin{table}[t]\centering\caption{Label counts per split (inclusion / exclusion criteria).}\label{tab:labels}\sm
+\safeinput{labels}\end{table}
+
+\section{Method}
+\subsection{Task format}
+A chat prompt contains the numbered note, the criterion type and text, the allowed labels for that type, and asks for JSON only: \texttt{\{"label": ..., "evidence": [ids]\}}. Inclusion labels are \emph{included, not included, not enough information, not applicable}; exclusion labels are \emph{excluded, not excluded, not enough information, not applicable}. Outputs are parsed strictly; unparsable or out-of-vocabulary outputs are counted as the label ``invalid'' (wrong), never silently repaired.
+\subsection{LoRA fine-tuning}
+The target is Qwen2.5-1.5B-Instruct \cite{qwen25}. LoRA adapters (rank 16, $\alpha{=}32$, dropout 0.05) are placed on all linear projections. Loss is computed on the answer tokens only. Settings: lr $2\times10^{-4}$ with cosine decay and 6 warm-up steps, 3 epochs, per-device batch 1 with 16 accumulation steps, fp16 autocast with fp32 adapter weights, gradient checkpointing, seed 42. The checkpoint with the lowest validation loss is kept (step 80). A second variant (v2) oversamples rare classes; it was trained for comparison and is reported below. A 0.5B draft adapter was trained with the same recipe for speculative decoding. Fig.~\ref{fig:curves} shows the training curves.
+\begin{figure*}[t]\centering\safefig{train_curves}{0.95\textwidth}{}\caption{Training and validation loss (log scale); dotted line marks the selected checkpoint.}\label{fig:curves}\end{figure*}
+
+\subsection{Metrics}
+Overall and per criterion type: accuracy, macro-F1 (over classes present in the gold labels of that split), per-class precision/recall/F1 and confusion matrices. Evidence is scored on sentence-ID sets with micro P/R/F1 over all records and a per-record macro average in which an empty gold set matched by an empty prediction counts as correct. Because many records have empty gold evidence, we also report micro metrics restricted to non-empty gold.
+
+\section{Results}
+\subsection{Before vs.\ after fine-tuning}
+Table~\ref{tab:val} (validation) and Table~\ref{tab:test} (test, evaluated once after model selection) compare the base model with fine-tuned variants. Final model: v1, chosen on validation. Evidence results are in Table~\ref{tab:evid}.
+\begin{table*}[t]\centering\caption{Validation results.}\label{tab:val}\sm\safeinput{summary_val}\end{table*}
+\begin{table*}[t]\centering\caption{Test results (single evaluation).}\label{tab:test}\sm\safeinput{summary_test}\end{table*}
+\begin{table*}[t]\centering\caption{Evidence-sentence metrics, test split (see also the validation analogue in the repo).}\label{tab:evid}\sm\safeinput{evidence_test}\end{table*}
+
+\subsection{Per-class behaviour}
+Table~\ref{tab:pc} and Fig.~\ref{fig:cm} show per-class scores and confusion matrices on the test split for the final model. Majority classes (\emph{not excluded}, \emph{included}, \emph{not enough information}) are learned; classes with a handful of examples (\emph{excluded}, \emph{not included}, \emph{not applicable}) are unreliable, and a single example moves their F1 by large steps. On validation the main confusion was \emph{not enough information} predicted as \emph{not excluded}.
+\begin{table}[t]\centering\caption{Per-class results, final model, test.}\label{tab:pc}\sm\safeinput{perclass_test}\end{table}
+\begin{figure*}[t]\centering\safefig{cm_test}{0.8\textwidth}{}\caption{Test confusion matrices (counts; colour is row-normalised).}\label{fig:cm}\end{figure*}
+
+\subsection{Error analysis}
+Table~\ref{tab:err} lists twelve test errors chosen automatically from distinct (gold, predicted) groups, at most two per group and patient. The recurring categories are: (i) contradicting or exclusion evidence missed, so \emph{excluded}/\emph{not included} becomes \emph{not excluded}/\emph{not enough information}; (ii) missing information treated as absence, so \emph{not enough information} becomes \emph{not excluded}; (iii) non-applicability not recognised; (iv) correct label with wrong or missing cited sentences. \todo{after running on the real test file, read errors.json and add 2--3 sentences of manual interpretation per category}
+\begin{table*}[t]\centering\caption{Test errors of the final model (full text in \texttt{report/generated/errors.json}).}\label{tab:err}\scriptsize\safeinput{errors}\end{table*}
+
+\section{KV-Cache Decoder}
+\texttt{generate\_cached} runs an explicit prefill and then one token per step, passing explicit \texttt{position\_ids}, a growing attention mask and the carried cache; \texttt{generate\_nocache} recomputes the full sequence each step and is the reference. Table~\ref{tab:kv} compares them (greedy, batch 1, fixed number of new tokens, fp16). The speed-up grows with input length (1.1$\times$ at 128 tokens, 4.5$\times$ at 512 with 64 new tokens) because the reference cost grows with sequence length while a cached step does not; peak memory differs little at these lengths because weights dominate, and the KV cache itself is small (GQA with 2 KV heads). In one configuration (256 in / 64 new) the token streams diverge at step 20; an fp32 re-run was identical, so the divergence is an fp16 near-tie in the argmax, not a cache bug.
+\begin{table*}[t]\centering\caption{KV cache vs.\ no-cache reference.}\label{tab:kv}\scriptsize\safeinput{kv}\end{table*}
+
+\section{Tiled Attention}
+\texttt{tiled\_attention} processes queries and keys in blocks keeping a running row maximum $m$, normaliser $\ell$ and accumulator $a$: for each key block with scores $S$, $m'=\max(m,\max S)$, $\ell\leftarrow \ell e^{m-m'}+\sum e^{S-m'}$, $a\leftarrow a e^{m-m'}+e^{S-m'}V$, and the output is $a/\ell$ \cite{milakov}. It never materialises the full $T_q\times T_k$ matrix, skips fully masked causal blocks, supports $T_q<T_k$ via an offset, and guards $-\infty-(-\infty)$. Table~\ref{tab:at} cross-checks it against a stable reference softmax and PyTorch SDPA (\safeinput{attn_tests_note}).
+\begin{table}[t]\centering\caption{Tiled attention correctness (fp32).}\label{tab:at}\scriptsize\safeinput{attn_tests}\end{table}
+Table~\ref{tab:ab} and Fig.~\ref{fig:ab} give timing and peak extra memory. Our tiled version is written in PyTorch loops, so it is not expected to beat the fused SDPA kernel in time; its value is the memory behaviour and the verified algorithm.
+\begin{table}[t]\centering\caption{Attention timing / memory (batch 1, 12 heads, $D{=}128$).}\label{tab:ab}\scriptsize\safeinput{attn_bench}\end{table}
+\begin{figure*}[t]\centering\safefig{attn_bench}{0.8\textwidth}{}\caption{Attention benchmark.}\label{fig:ab}\end{figure*}
+
+\section{Speculative Decoding}
+A 0.5B draft (same tokenizer, asserted in code) proposes $k$ tokens greedily; the 1.5B target verifies $[\text{last}]+\text{drafts}$ in one pass, the longest agreeing prefix is accepted, and the target's own next token is appended as correction or bonus token. Both caches are cropped to hold exactly the accepted sequence; the invariant at the start of a round is that both caches hold KV for all tokens but the last. Output is identical to the target's greedy output (8/8 prompts equal). Table~\ref{tab:sp} shows speculative decoding was \emph{slower} than cached greedy decoding (0.65--0.76$\times$): with a 1.5B target the draft is only 3$\times$ smaller, acceptance is 0.5--0.7, and each round pays draft and verification overhead plus cache cropping in Python, whereas a cached 1.5B step is already cheap. Larger target/draft ratios, higher acceptance or batched verification would be needed for a gain.
+\begin{table*}[t]\centering\caption{Speculative vs.\ greedy cached decoding (48 new tokens, 8 prompts).}\label{tab:sp}\scriptsize\safeinput{spec}\end{table*}
+
+\section{Application}
+A Gradio app has three tabs: (1) \emph{Screening}: paste a note and criterion (or load a test example), choose a decoding mode (plain, KV cache, speculative), and see the label, evidence sentences and raw JSON; invalid inputs give a recoverable message. (2) \emph{Decoding comparison}: runs the modes side by side with latency, tokens/s and equality of outputs. (3) \emph{Results}: loads metric files and exports a report. Patient-level aggregation across criteria is an explicit rule shown to the user, not a ground-truth eligibility label. The app is labelled an educational prototype.
+
+\section{Limitations}
+Only 53 patients; validation/test supports of 1--3 for rare classes make per-class scores noisy and differences between v1 and v2 within noise. Model selection used the validation split and test was evaluated once for the final model. Greedy fp16 decoding can differ across hardware on near-ties. The public app link exists only while the notebook session runs. No clinical validation was performed.
+
+\section{Conclusion}
+LoRA fine-tuning makes a 1.5B decoder usable for criterion-level eligibility labelling (validation accuracy 0.107 $\rightarrow$ 0.752), but rare classes and evidence selection remain hard. The KV cache gives up to 4.5$\times$ speed-up at 512 tokens, tiled attention matches the reference to float precision, and speculative decoding preserved outputs but did not speed things up here.
+
+\appendices
+\section{AI-Use Statement}
+An AI assistant (Claude) was used for planning, writing and debugging code (training, evaluation, KV cache, tiled attention, speculative decoding, app), generating figure/table scripts and drafting this report. All experiments were run by the author on Kaggle; numbers come from the committed JSON files. \todo{author: describe what you verified yourself and any parts you rewrote}
+
+\begin{thebibliography}{10}
+\bibitem{trialgpt} Q.~Jin \emph{et al.}, ``Matching patients to clinical trials with large language models,'' \emph{Nature Communications}, vol.~15, 2024.
+\bibitem{lora} E.~J. Hu \emph{et al.}, ``LoRA: Low-rank adaptation of large language models,'' in \emph{ICLR}, 2022.
+\bibitem{flash} T.~Dao \emph{et al.}, ``FlashAttention: Fast and memory-efficient exact attention with IO-awareness,'' in \emph{NeurIPS}, 2022.
+\bibitem{milakov} M.~Milakov and N.~Gimelshein, ``Online normalizer calculation for softmax,'' arXiv:1805.02867, 2018.
+\bibitem{leviathan} Y.~Leviathan, M.~Kalman, and Y.~Matias, ``Fast inference from transformers via speculative decoding,'' in \emph{ICML}, 2023.
+\bibitem{chen} C.~Chen \emph{et al.}, ``Accelerating large language model decoding with speculative sampling,'' arXiv:2302.01318, 2023.
+\bibitem{qwen25} A.~Yang \emph{et al.}, ``Qwen2.5 technical report,'' arXiv:2412.15115, 2024.
+\end{thebibliography}
+\end{document}
