@@ -1,2 +1,3 @@
 outputs/lora*/checkpoint-*
 __pycache__/
+outputs/lora*/

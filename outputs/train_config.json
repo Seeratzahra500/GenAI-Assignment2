@@ -1,0 +1,19 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "lora": {
+    "r": 16,
+    "alpha": 32,
+    "dropout": 0.05,
+    "targets": "all linear proj"
+  },
+  "lr": 0.0002,
+  "epochs": 3,
+  "eff_batch": 16,
+  "per_device_batch": 1,
+  "grad_accum": 16,
+  "grad_checkpointing": true,
+  "max_len": 1024,
+  "fp16": true,
+  "seed": 42,
+  "best_checkpoint": "outputs/lora_1.5b/checkpoint-80"
+}
