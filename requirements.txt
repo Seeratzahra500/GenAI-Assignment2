@@ -1,0 +1,13 @@
+# Package names only (versions were not pinned). After the final run, execute `pip freeze > requirements.lock.txt` on Kaggle and commit it.
+torch
+transformers
+peft
+accelerate
+datasets
+pandas
+pyarrow
+numpy
+scikit-learn
+matplotlib
+gradio
+huggingface_hub
