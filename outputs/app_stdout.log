@@ -1,0 +1,7 @@
+Loading models (first start downloads weights) ...
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:00<03:15,  1.72it/s]Loading weights:  37%|███▋      | 124/338 [00:00<00:00, 240.01it/s]Loading weights:  57%|█████▋    | 191/338 [00:00<00:00, 280.45it/s]Loading weights:  72%|███████▏  | 244/338 [00:01<00:00, 280.35it/s]Loading weights:  85%|████████▍ | 287/338 [00:01<00:00, 308.10it/s]Loading weights:  98%|█████████▊| 330/338 [00:01<00:00, 303.61it/s]Loading weights: 100%|██████████| 338/338 [00:01<00:00, 256.69it/s]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:00<01:52,  2.58it/s]Loading weights:  97%|█████████▋| 281/290 [00:00<00:00, 755.50it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 593.25it/s]
+* Running on local URL:  http://0.0.0.0:7860
+* Running on public URL: https://dded6a3e744e3d674d.gradio.live
+
+This share link is temporary and will last for up to 1 week (best effort). For free permanent hosting and GPU upgrades, run `gradio deploy` from the terminal in the working directory to deploy to Hugging Face Spaces (https://huggingface.co/spaces)

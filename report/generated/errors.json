@@ -1,0 +1,228 @@
+[
+  {
+    "n": 1,
+    "annotation_id": 161,
+    "patient_id": "sigir-201410",
+    "type": "inclusion",
+    "criterion": "Patients undergoing elective carotid endarterectomy",
+    "gold": "not included",
+    "pred": "not enough information",
+    "gold_evidence": [],
+    "pred_evidence": [
+      0
+    ],
+    "category": "contradicting evidence missed (contradictory case)",
+    "raw_output": "{\"label\": \"not enough information\", \"evidence\": [0]}",
+    "gold_evidence_text": [],
+    "pred_evidence_text": [
+      "A physician is called to see a 67-year-old woman who underwent cardiac catheterization via the right femoral artery earlier in the morning."
+    ]
+  },
+  {
+    "n": 2,
+    "annotation_id": 188,
+    "patient_id": "sigir-201411",
+    "type": "inclusion",
+    "criterion": "The use of vasopressors to maintain a systolic blood pressure of at least 90mmHg despite fluid resuscitation, low dose of dopamine (\u2264 5 \u03bcg/kg per minute), or dobutamine;",
+    "gold": "not included",
+    "pred": "not enough information",
+    "gold_evidence": [
+      3
+    ],
+    "pred_evidence": [],
+    "category": "contradicting evidence missed (contradictory case)",
+    "raw_output": "{\"label\": \"not enough information\", \"evidence\": []}",
+    "gold_evidence_text": [
+      "Her body temperature is normal and her blood pressure is 80/60."
+    ],
+    "pred_evidence_text": []
+  },
+  {
+    "n": 3,
+    "annotation_id": 683,
+    "patient_id": "sigir-20158",
+    "type": "exclusion",
+    "criterion": "Previous tonsillectomy, including partial tonsillectomy",
+    "gold": "not applicable",
+    "pred": "not excluded",
+    "gold_evidence": [],
+    "pred_evidence": [],
+    "category": "non-applicability not recognised",
+    "raw_output": "{\"label\": \"not excluded\", \"evidence\": []}",
+    "gold_evidence_text": [],
+    "pred_evidence_text": []
+  },
+  {
+    "n": 4,
+    "annotation_id": 751,
+    "patient_id": "sigir-201513",
+    "type": "exclusion",
+    "criterion": "breast-feeding",
+    "gold": "not applicable",
+    "pred": "not excluded",
+    "gold_evidence": [],
+    "pred_evidence": [],
+    "category": "non-applicability not recognised",
+    "raw_output": "{\"label\": \"not excluded\", \"evidence\": []}",
+    "gold_evidence_text": [],
+    "pred_evidence_text": []
+  },
+  {
+    "n": 5,
+    "annotation_id": 422,
+    "patient_id": "sigir-201422",
+    "type": "inclusion",
+    "criterion": "If female, using birth control",
+    "gold": "not applicable",
+    "pred": "not enough information",
+    "gold_evidence": [
+      3
+    ],
+    "pred_evidence": [],
+    "category": "non-applicability not recognised",
+    "raw_output": "{\"label\": \"not enough information\", \"evidence\": []}",
+    "gold_evidence_text": [
+      "She has had no sexual partners and her menses are regular."
+    ],
+    "pred_evidence_text": []
+  },
+  {
+    "n": 6,
+    "annotation_id": 745,
+    "patient_id": "sigir-201513",
+    "type": "inclusion",
+    "criterion": "female patients have adequate birth-control method",
+    "gold": "not applicable",
+    "pred": "not enough information",
+    "gold_evidence": [],
+    "pred_evidence": [],
+    "category": "non-applicability not recognised",
+    "raw_output": "{\"label\": \"not enough information\", \"evidence\": []}",
+    "gold_evidence_text": [],
+    "pred_evidence_text": []
+  },
+  {
+    "n": 7,
+    "annotation_id": 169,
+    "patient_id": "sigir-201410",
+    "type": "exclusion",
+    "criterion": "Patients with an estimated pre-operative glomerular filtration rate < 30mls/min/1.73m2",
+    "gold": "not enough information",
+    "pred": "not excluded",
+    "gold_evidence": [],
+    "pred_evidence": [],
+    "category": "missing information treated as absence or eligibility",
+    "raw_output": "{\"label\": \"not excluded\", \"evidence\": []}",
+    "gold_evidence_text": [],
+    "pred_evidence_text": []
+  },
+  {
+    "n": 8,
+    "annotation_id": 193,
+    "patient_id": "sigir-201411",
+    "type": "exclusion",
+    "criterion": "Patients were moribund.",
+    "gold": "not enough information",
+    "pred": "not excluded",
+    "gold_evidence": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "pred_evidence": [],
+    "category": "missing information treated as absence or eligibility",
+    "raw_output": "{\"label\": \"not excluded\", \"evidence\": []}",
+    "gold_evidence_text": [
+      "A 40-year-old woman with no past medical history presents to the ER with excruciating pain in her right arm that had started 1 hour prior to her admission.",
+      "She denies trauma.",
+      "On examination she is pale and in moderate discomfort, as well as tachypneic and tachycardic.",
+      "Her body temperature is normal and her blood pressure is 80/60.",
+      "Her right arm has no discoloration or movement limitation."
+    ],
+    "pred_evidence_text": []
+  },
+  {
+    "n": 9,
+    "annotation_id": 762,
+    "patient_id": "sigir-201513",
+    "type": "inclusion",
+    "criterion": "A sore and scratchy throat and/or pain on swallowing (odynophagia) together with at least 2 of the following clinical signs:",
+    "gold": "not enough information",
+    "pred": "included",
+    "gold_evidence": [
+      0
+    ],
+    "pred_evidence": [
+      0,
+      2
+    ],
+    "category": "missing information treated as absence or eligibility",
+    "raw_output": "{\"label\": \"included\", \"evidence\": [0, 2]}",
+    "gold_evidence_text": [
+      "A 5-year-old boy presents to the emergency department with complaints of progressively worsening dysphagia, drooling, fever and vocal changes."
+    ],
+    "pred_evidence_text": [
+      "A 5-year-old boy presents to the emergency department with complaints of progressively worsening dysphagia, drooling, fever and vocal changes.",
+      "He is drooling and speaks with a muffled \"hot potato\" voice."
+    ]
+  },
+  {
+    "n": 10,
+    "annotation_id": 176,
+    "patient_id": "sigir-201410",
+    "type": "inclusion",
+    "criterion": "No medical history of central vena catheterization.",
+    "gold": "included",
+    "pred": "not enough information",
+    "gold_evidence": [
+      0
+    ],
+    "pred_evidence": [],
+    "category": "supporting evidence not found (over-cautious)",
+    "raw_output": "{\"label\": \"not enough information\", \"evidence\": []}",
+    "gold_evidence_text": [
+      "A physician is called to see a 67-year-old woman who underwent cardiac catheterization via the right femoral artery earlier in the morning."
+    ],
+    "pred_evidence_text": []
+  },
+  {
+    "n": 11,
+    "annotation_id": 741,
+    "patient_id": "sigir-201513",
+    "type": "inclusion",
+    "criterion": "referring doctor suspects peritonsillar abscess",
+    "gold": "not enough information",
+    "pred": "not enough information",
+    "gold_evidence": [
+      0
+    ],
+    "pred_evidence": [],
+    "category": "correct label, cited sentences miss the gold evidence",
+    "raw_output": "{\"label\": \"not enough information\", \"evidence\": []}",
+    "gold_evidence_text": [
+      "A 5-year-old boy presents to the emergency department with complaints of progressively worsening dysphagia, drooling, fever and vocal changes."
+    ],
+    "pred_evidence_text": []
+  },
+  {
+    "n": 12,
+    "annotation_id": 830,
+    "patient_id": "sigir-201516",
+    "type": "inclusion",
+    "criterion": "Normal lung function, defined as (Knudson 1976/1984 predicted set): FVC of > 80 % of that predicted for gender, ethnicity, age and height FEV1 of > 80 % of that predicted for gender, ethnicity, age and height FEV1/FVC ratio of > .75",
+    "gold": "not enough information",
+    "pred": "not enough information",
+    "gold_evidence": [
+      0
+    ],
+    "pred_evidence": [],
+    "category": "correct label, cited sentences miss the gold evidence",
+    "raw_output": "{\"label\": \"not enough information\", \"evidence\": []}",
+    "gold_evidence_text": [
+      "A 4 year old boy presents to the emergency room with wheezing."
+    ],
+    "pred_evidence_text": []
+  }
+]

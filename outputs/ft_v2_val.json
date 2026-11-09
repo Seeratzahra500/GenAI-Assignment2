@@ -1,0 +1,3344 @@
+{
+  "settings": {
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "adapter": "outputs/lora_1.5b_v2/best",
+    "split": "val",
+    "decoding": "greedy (do_sample=False)",
+    "max_new_tokens": 64,
+    "dtype": "float16",
+    "batch_size": 8,
+    "seconds": 27.5
+  },
+  "metrics": {
+    "parse_failure_rate": 0.0,
+    "overall": {
+      "n": 206,
+      "accuracy": 0.7233009708737864,
+      "macro_f1_present_classes": 0.4668685400516796,
+      "per_class": {
+        "included": {
+          "precision": 0.8620689655172413,
+          "recall": 0.7142857142857143,
+          "f1": 0.78125,
+          "support": 35
+        },
+        "not included": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 3
+        },
+        "excluded": {
+          "precision": 1.0,
+          "recall": 0.5,
+          "f1": 0.6666666666666666,
+          "support": 2
+        },
+        "not excluded": {
+          "precision": 0.7266187050359713,
+          "recall": 1.0,
+          "f1": 0.8416666666666667,
+          "support": 101
+        },
+        "not enough information": {
+          "precision": 0.6666666666666666,
+          "recall": 0.41509433962264153,
+          "f1": 0.5116279069767442,
+          "support": 53
+        },
+        "not applicable": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 12
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "included",
+          "not included",
+          "excluded",
+          "not excluded",
+          "not enough information",
+          "not applicable",
+          "invalid"
+        ],
+        "rows_gold_cols_pred": [
+          [
+            25,
+            2,
+            0,
+            0,
+            8,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            101,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            2,
+            0,
+            26,
+            22,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            11,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    "inclusion": {
+      "n": 66,
+      "accuracy": 0.7121212121212122,
+      "macro_f1_present_classes": 0.37864583333333335,
+      "per_class": {
+        "included": {
+          "precision": 0.8620689655172413,
+          "recall": 0.7142857142857143,
+          "f1": 0.78125,
+          "support": 35
+        },
+        "not included": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 3
+        },
+        "not enough information": {
+          "precision": 0.6666666666666666,
+          "recall": 0.8148148148148148,
+          "f1": 0.7333333333333333,
+          "support": 27
+        },
+        "not applicable": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 1
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "included",
+          "not included",
+          "not enough information",
+          "not applicable",
+          "invalid"
+        ],
+        "rows_gold_cols_pred": [
+          [
+            25,
+            2,
+            8,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            2,
+            0,
+            0
+          ],
+          [
+            3,
+            2,
+            22,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    "exclusion": {
+      "n": 140,
+      "accuracy": 0.7285714285714285,
+      "macro_f1_present_classes": 0.3770833333333333,
+      "per_class": {
+        "excluded": {
+          "precision": 1.0,
+          "recall": 0.5,
+          "f1": 0.6666666666666666,
+          "support": 2
+        },
+        "not excluded": {
+          "precision": 0.7266187050359713,
+          "recall": 1.0,
+          "f1": 0.8416666666666667,
+          "support": 101
+        },
+        "not enough information": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 26
+        },
+        "not applicable": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 11
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "excluded",
+          "not excluded",
+          "not enough information",
+          "not applicable",
+          "invalid"
+        ],
+        "rows_gold_cols_pred": [
+          [
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            101,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            26,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            11,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    "evidence_all_records": {
+      "micro": {
+        "precision": 0.7037037037037037,
+        "recall": 0.4956521739130435,
+        "f1": 0.5816326530612245
+      },
+      "macro_per_record": {
+        "precision": 0.7734627831715211,
+        "recall": 0.7682038834951457,
+        "f1": 0.7661812297734628
+      }
+    },
+    "evidence_nonempty_gold_only": {
+      "micro": {
+        "precision": 0.890625,
+        "recall": 0.4956521739130435,
+        "f1": 0.6368715083798883
+      },
+      "macro_per_record": {
+        "precision": 0.5814814814814814,
+        "recall": 0.5694444444444444,
+        "f1": 0.5648148148148148
+      }
+    },
+    "evidence_n_empty_gold": 116
+  },
+  "rows": [
+    {
+      "annotation_id": 0,
+      "patient_id": "sigir-20141",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [
+        0,
+        1,
+        2
+      ],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 1,
+      "patient_id": "sigir-20141",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 2,
+      "patient_id": "sigir-20141",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 3,
+      "patient_id": "sigir-20141",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        8
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [8]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          8
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 4,
+      "patient_id": "sigir-20141",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        8
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [8]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          8
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 5,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [3]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          3
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 6,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 7,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 8,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [
+        0,
+        1,
+        2
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 9,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 10,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 11,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 12,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 13,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        4
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 14,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        3
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [3]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          3
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 15,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 16,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 17,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        5
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 18,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 19,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 20,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        8
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 21,
+      "patient_id": "sigir-20141",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        3
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [3]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          3
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 22,
+      "patient_id": "sigir-20141",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        3,
+        4
+      ],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": [3, 4]}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [
+          3,
+          4
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 23,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        5
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 24,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not applicable",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 25,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        3
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [3]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          3
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 26,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 27,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 28,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 29,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 30,
+      "patient_id": "sigir-20141",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 31,
+      "patient_id": "sigir-20142",
+      "criterion_type": "inclusion",
+      "gold_label": "not included",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": [0]}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 32,
+      "patient_id": "sigir-20142",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 33,
+      "patient_id": "sigir-20142",
+      "criterion_type": "inclusion",
+      "gold_label": "not applicable",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 34,
+      "patient_id": "sigir-20142",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 35,
+      "patient_id": "sigir-20142",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 36,
+      "patient_id": "sigir-20142",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 37,
+      "patient_id": "sigir-20142",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        6
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [6]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          6
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 38,
+      "patient_id": "sigir-20142",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 39,
+      "patient_id": "sigir-20142",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 40,
+      "patient_id": "sigir-20142",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 41,
+      "patient_id": "sigir-20142",
+      "criterion_type": "exclusion",
+      "gold_label": "excluded",
+      "gold_evidence": [
+        4
+      ],
+      "raw": "{\"label\": \"excluded\", \"evidence\": [4]}",
+      "pred": {
+        "label": "excluded",
+        "evidence": [
+          4
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 42,
+      "patient_id": "sigir-20142",
+      "criterion_type": "exclusion",
+      "gold_label": "not applicable",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 235,
+      "patient_id": "sigir-201415",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [
+        0,
+        1,
+        4,
+        5
+      ],
+      "raw": "{\"label\": \"not included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "not included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 236,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        0,
+        1,
+        4,
+        5
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 237,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        0,
+        3
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [3]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          3
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 238,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        4
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 239,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 240,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 241,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        1
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [1]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          1
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 242,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 243,
+      "patient_id": "sigir-201415",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [
+        0,
+        3,
+        5
+      ],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 244,
+      "patient_id": "sigir-201415",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 245,
+      "patient_id": "sigir-201415",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 246,
+      "patient_id": "sigir-201415",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        6
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [6]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          6
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 247,
+      "patient_id": "sigir-201415",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [
+        6
+      ],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 248,
+      "patient_id": "sigir-201415",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [
+        4
+      ],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 249,
+      "patient_id": "sigir-201415",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 250,
+      "patient_id": "sigir-201415",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [
+        4
+      ],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 251,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        3
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [3]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          3
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 252,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        1
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [1]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          1
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 253,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [
+        4
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [0, 1, 4]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          0,
+          1,
+          4
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 254,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 255,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 256,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 257,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        2
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [2]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          2
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 258,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 259,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 260,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 261,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 262,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 263,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "excluded",
+      "gold_evidence": [
+        5
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [4]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          4
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 264,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 265,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [4]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          4
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 266,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 267,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 268,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 269,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 270,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        6
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 271,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 272,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 273,
+      "patient_id": "sigir-201415",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 364,
+      "patient_id": "sigir-201420",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 365,
+      "patient_id": "sigir-201420",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        6
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [6]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          6
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 366,
+      "patient_id": "sigir-201420",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0,
+        4,
+        5
+      ],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": [4]}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [
+          4
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 367,
+      "patient_id": "sigir-201420",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0,
+        4
+      ],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 368,
+      "patient_id": "sigir-201420",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 369,
+      "patient_id": "sigir-201420",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        2
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 370,
+      "patient_id": "sigir-201420",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        2
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 371,
+      "patient_id": "sigir-201420",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 372,
+      "patient_id": "sigir-201420",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 373,
+      "patient_id": "sigir-201420",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 374,
+      "patient_id": "sigir-201420",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 375,
+      "patient_id": "sigir-201420",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [
+        0,
+        1
+      ],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": [0, 1, 2]}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [
+          0,
+          1,
+          2
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 376,
+      "patient_id": "sigir-201420",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 377,
+      "patient_id": "sigir-201420",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        2,
+        3
+      ],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 378,
+      "patient_id": "sigir-201420",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 379,
+      "patient_id": "sigir-201420",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 380,
+      "patient_id": "sigir-201420",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 499,
+      "patient_id": "sigir-201427",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0,
+        3
+      ],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 500,
+      "patient_id": "sigir-201427",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 501,
+      "patient_id": "sigir-201427",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 502,
+      "patient_id": "sigir-201427",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 503,
+      "patient_id": "sigir-201427",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 504,
+      "patient_id": "sigir-201427",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 505,
+      "patient_id": "sigir-201427",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 506,
+      "patient_id": "sigir-201427",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        5
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [5]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          5
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 507,
+      "patient_id": "sigir-201427",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 508,
+      "patient_id": "sigir-201427",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 509,
+      "patient_id": "sigir-201427",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 510,
+      "patient_id": "sigir-201427",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 511,
+      "patient_id": "sigir-201427",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 512,
+      "patient_id": "sigir-201427",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 513,
+      "patient_id": "sigir-201427",
+      "criterion_type": "exclusion",
+      "gold_label": "not applicable",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 514,
+      "patient_id": "sigir-201427",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 515,
+      "patient_id": "sigir-201427",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0,
+        3,
+        4
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [3, 4]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          3,
+          4
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 516,
+      "patient_id": "sigir-201427",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 517,
+      "patient_id": "sigir-201427",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [0]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 518,
+      "patient_id": "sigir-201427",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 541,
+      "patient_id": "sigir-201430",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [
+        0,
+        7
+      ],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 542,
+      "patient_id": "sigir-201430",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": [0]}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 543,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 544,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        2,
+        3
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [2]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          2
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 545,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 546,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 547,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 548,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        4
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 549,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 550,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 551,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not applicable",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 552,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 553,
+      "patient_id": "sigir-201430",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 554,
+      "patient_id": "sigir-201430",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": [7]}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [
+          7
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 555,
+      "patient_id": "sigir-201430",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"not included\", \"evidence\": [0, 1, 7]}",
+      "pred": {
+        "label": "not included",
+        "evidence": [
+          0,
+          1,
+          7
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 556,
+      "patient_id": "sigir-201430",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 557,
+      "patient_id": "sigir-201430",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 558,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not applicable",
+      "gold_evidence": [
+        8
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [8]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          8
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 559,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 560,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 561,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 562,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [2]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          2
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 563,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [1, 2, 3, 4, 5, 6, 7]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 564,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 565,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 566,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 567,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 568,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not applicable",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 569,
+      "patient_id": "sigir-201430",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        2
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [1]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          1
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 798,
+      "patient_id": "sigir-201515",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 799,
+      "patient_id": "sigir-201515",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 800,
+      "patient_id": "sigir-201515",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"not included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "not included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 801,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not applicable",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [0, 1, 2]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          0,
+          1,
+          2
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 802,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        2
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [2]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          2
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 803,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        2
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [2]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          2
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 804,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        4
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 805,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        3
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [3]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          3
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 806,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 807,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 808,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        5
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [5]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          5
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 809,
+      "patient_id": "sigir-201515",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"not included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "not included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 810,
+      "patient_id": "sigir-201515",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 811,
+      "patient_id": "sigir-201515",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        5
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [5]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          5
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 812,
+      "patient_id": "sigir-201515",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 813,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 814,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 815,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 816,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 817,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not applicable",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [0]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 818,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 819,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [0]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 820,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 821,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        3,
+        4
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 822,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 823,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        2
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 824,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 825,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 826,
+      "patient_id": "sigir-201515",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 929,
+      "patient_id": "sigir-201522",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 930,
+      "patient_id": "sigir-201522",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 931,
+      "patient_id": "sigir-201522",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 932,
+      "patient_id": "sigir-201522",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 933,
+      "patient_id": "sigir-201522",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 934,
+      "patient_id": "sigir-201522",
+      "criterion_type": "inclusion",
+      "gold_label": "not included",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 935,
+      "patient_id": "sigir-201522",
+      "criterion_type": "inclusion",
+      "gold_label": "not included",
+      "gold_evidence": [
+        3
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [3]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          3
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 936,
+      "patient_id": "sigir-201522",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 937,
+      "patient_id": "sigir-201522",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 938,
+      "patient_id": "sigir-201522",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        4
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [4]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          4
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 939,
+      "patient_id": "sigir-201522",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        4
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [4]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          4
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 940,
+      "patient_id": "sigir-201522",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 941,
+      "patient_id": "sigir-201522",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        4
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 942,
+      "patient_id": "sigir-201522",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        4
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [4]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          4
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 943,
+      "patient_id": "sigir-201522",
+      "criterion_type": "inclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [
+        3
+      ],
+      "raw": "{\"label\": \"not enough information\", \"evidence\": []}",
+      "pred": {
+        "label": "not enough information",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 944,
+      "patient_id": "sigir-201522",
+      "criterion_type": "inclusion",
+      "gold_label": "included",
+      "gold_evidence": [
+        0
+      ],
+      "raw": "{\"label\": \"included\", \"evidence\": [0]}",
+      "pred": {
+        "label": "included",
+        "evidence": [
+          0
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 945,
+      "patient_id": "sigir-201522",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 946,
+      "patient_id": "sigir-201522",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 947,
+      "patient_id": "sigir-201522",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 948,
+      "patient_id": "sigir-201522",
+      "criterion_type": "exclusion",
+      "gold_label": "not applicable",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 949,
+      "patient_id": "sigir-201522",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 950,
+      "patient_id": "sigir-201522",
+      "criterion_type": "exclusion",
+      "gold_label": "not applicable",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 951,
+      "patient_id": "sigir-201522",
+      "criterion_type": "exclusion",
+      "gold_label": "not enough information",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 952,
+      "patient_id": "sigir-201522",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 953,
+      "patient_id": "sigir-201522",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 954,
+      "patient_id": "sigir-201522",
+      "criterion_type": "exclusion",
+      "gold_label": "not applicable",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 955,
+      "patient_id": "sigir-201522",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 956,
+      "patient_id": "sigir-201522",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [
+        3
+      ],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": [3]}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [
+          3
+        ],
+        "valid": true
+      }
+    },
+    {
+      "annotation_id": 957,
+      "patient_id": "sigir-201522",
+      "criterion_type": "exclusion",
+      "gold_label": "not excluded",
+      "gold_evidence": [],
+      "raw": "{\"label\": \"not excluded\", \"evidence\": []}",
+      "pred": {
+        "label": "not excluded",
+        "evidence": [],
+        "valid": true
+      }
+    }
+  ]
+}

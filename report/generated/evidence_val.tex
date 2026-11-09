@@ -1,0 +1,8 @@
+\begin{tabular}{lrrrrrrr}\toprule
+ & \multicolumn{3}{c}{All records (micro)} & Macro & \multicolumn{3}{c}{Non-empty gold only (micro)} \\
+\cmidrule(lr){2-4}\cmidrule(lr){6-8}
+Model & P & R & F1 & F1 & P & R & F1 \\ \midrule
+Base (no fine-tuning) & 0.071 & 0.626 & 0.128 & 0.135 & 0.199 & 0.626 & 0.302 \\
+v1 LoRA (final) & 0.504 & 0.548 & 0.525 & 0.727 & 0.600 & 0.548 & 0.573 \\
+v2 LoRA (oversampled) & 0.704 & 0.496 & 0.582 & 0.766 & 0.891 & 0.496 & 0.637 \\
+\bottomrule\end{tabular}

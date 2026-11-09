@@ -1,0 +1,7 @@
+\begin{tabular}{lrrrrrrr}\toprule
+Mode & Tokens equal & tok/s & Speedup & Accept. rate & Acc./round & Target passes & Peak MiB \\ \midrule
+Greedy + KV cache & -- & 25.5 & 1.00$\times$ & -- & -- & -- & 4030 \\
+Speculative $k=2$ & 8/8 & 19.5 & 0.76$\times$ & 0.69 & 1.34 & 169 & 4088 \\
+Speculative $k=4$ & 8/8 & 17.9 & 0.70$\times$ & 0.58 & 2.19 & 126 & 4088 \\
+Speculative $k=6$ & 8/8 & 16.5 & 0.65$\times$ & 0.50 & 2.84 & 106 & 4088 \\
+\bottomrule\end{tabular}

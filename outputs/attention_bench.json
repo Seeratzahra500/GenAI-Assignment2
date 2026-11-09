@@ -1,0 +1,62 @@
+{
+  "settings": {
+    "device": "cuda",
+    "dtype": "torch.float16",
+    "heads": 12,
+    "head_dim": 128,
+    "reps": 5,
+    "gpu": "Tesla T4"
+  },
+  "results": [
+    {
+      "T": 256,
+      "ref_ms": 0.4607310002029408,
+      "ref_mem_MiB": 12.0,
+      "tiled_ms": 5.269424000289291,
+      "tiled_mem_MiB": 3.765625,
+      "sdpa_ms": 0.076296000770526,
+      "sdpa_mem_MiB": 0.75,
+      "tiled_vs_ref_max_err": 0.00048828125
+    },
+    {
+      "T": 512,
+      "ref_ms": 1.439724999727332,
+      "ref_mem_MiB": 42.0,
+      "tiled_ms": 17.549879999933182,
+      "tiled_mem_MiB": 5.6376953125,
+      "sdpa_ms": 0.16293799853883684,
+      "sdpa_mem_MiB": 1.5,
+      "tiled_vs_ref_max_err": 0.000244140625
+    },
+    {
+      "T": 1024,
+      "ref_ms": 5.099816999063478,
+      "ref_mem_MiB": 156.0,
+      "tiled_ms": 67.74849600151356,
+      "tiled_mem_MiB": 10.1376953125,
+      "sdpa_ms": 0.4319399995438289,
+      "sdpa_mem_MiB": 3.0,
+      "tiled_vs_ref_max_err": 0.00048828125
+    },
+    {
+      "T": 2048,
+      "ref_ms": 19.06466000036744,
+      "ref_mem_MiB": 600.0,
+      "tiled_ms": 274.91055999962555,
+      "tiled_mem_MiB": 19.1376953125,
+      "sdpa_ms": 0.8344030011357972,
+      "sdpa_mem_MiB": 6.0,
+      "tiled_vs_ref_max_err": 0.00048828125
+    },
+    {
+      "T": 4096,
+      "ref_ms": 86.48456099945179,
+      "ref_mem_MiB": 2352.0,
+      "tiled_ms": 980.0572939984704,
+      "tiled_mem_MiB": 37.1376953125,
+      "sdpa_ms": 5.774943998403614,
+      "sdpa_mem_MiB": 12.0,
+      "tiled_vs_ref_max_err": 0.00048828125
+    }
+  ]
+}
