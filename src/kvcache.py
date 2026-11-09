@@ -12,7 +12,7 @@ def generate_nocache(model, ids, n_new):
     seq, logs, t_first, t_all = ids.clone(), [], 0.0, time.perf_counter()
     sync(); t0 = time.perf_counter()
     for s in range(n_new):
-        lg = model(input_ids=seq, use_cache=False).logits[:, -1, :].float()
+        lg = model(input_ids=seq, use_cache=False).logits[:, -1, :].float().clone()
         logs.append(lg); seq = torch.cat([seq, lg.argmax(-1, keepdim=True)], 1)
         if s == 0: sync(); t_first = time.perf_counter() - t0
     sync(); total = time.perf_counter() - t0
@@ -27,7 +27,7 @@ def generate_cached(model, ids, n_new):
     sync(); t0 = time.perf_counter()
     out = model(input_ids=ids, position_ids=torch.arange(T, device=dev)[None], past_key_values=cache, use_cache=True)
     cache = out.past_key_values
-    lg = out.logits[:, -1, :].float(); logs = [lg]; nxt = lg.argmax(-1, keepdim=True); toks = [nxt]
+    lg = out.logits[:, -1, :].float().clone(); logs = [lg]; nxt = lg.argmax(-1, keepdim=True); toks = [nxt]
     sync(); t_pre = time.perf_counter() - t0
     for s in range(1, n_new):
         cur = T + s - 1                                   # absolute position of the token being fed
@@ -36,7 +36,7 @@ def generate_cached(model, ids, n_new):
                     attention_mask=torch.ones(1, cur + 1, dtype=torch.long, device=dev),
                     past_key_values=cache, use_cache=True)
         cache = out.past_key_values
-        lg = out.logits[:, -1, :].float(); logs.append(lg)
+        lg = out.logits[:, -1, :].float().clone(); logs.append(lg)
         nxt = lg.argmax(-1, keepdim=True); toks.append(nxt)
     sync(); total = time.perf_counter() - t0
     return torch.cat(toks, 1)[0].tolist(), logs, {"prefill_s": t_pre, "decode_s": total - t_pre}

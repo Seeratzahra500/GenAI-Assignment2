@@ -1,0 +1,78 @@
+{
+  "settings": {
+    "target": "Qwen/Qwen2.5-1.5B-Instruct",
+    "target_adapter": "outputs/lora_1.5b/best",
+    "draft": "Qwen/Qwen2.5-0.5B-Instruct",
+    "draft_adapter": "outputs/lora_0.5b/best",
+    "dtype": "float16",
+    "ks": [
+      2,
+      4,
+      6
+    ],
+    "n_new": 48,
+    "n_prompts": 8,
+    "reps": 2,
+    "out": "outputs/spec_bench.json",
+    "both_models_MiB": 3899,
+    "decoding": "greedy, fixed n_new, batch 1, EOS ignored"
+  },
+  "results": [
+    {
+      "mode": "greedy_kvcache",
+      "k": 0,
+      "sec_total": 15.077447137000263,
+      "tok_per_s": 25.468502493214434,
+      "peak_MiB": 4030.27099609375,
+      "all_tokens_equal": true
+    },
+    {
+      "mode": "speculative",
+      "k": 2,
+      "sec_total": 19.709976828499975,
+      "tok_per_s": 19.482519098893544,
+      "speedup_vs_greedy_cache": 0.7649652390863683,
+      "peak_MiB": 4087.873046875,
+      "all_tokens_equal": true,
+      "prompts_equal": "8/8",
+      "mismatches": [],
+      "acceptance_rate": 0.6935483870967742,
+      "mean_accepted_per_round": 1.3354037267080745,
+      "target_forward_calls": 169,
+      "draft_forward_calls": 420,
+      "tokens_generated": 384
+    },
+    {
+      "mode": "speculative",
+      "k": 4,
+      "sec_total": 21.448749924999902,
+      "tok_per_s": 17.903141271297272,
+      "speedup_vs_greedy_cache": 0.7029522554797716,
+      "peak_MiB": 4087.873046875,
+      "all_tokens_equal": true,
+      "prompts_equal": "8/8",
+      "mismatches": [],
+      "acceptance_rate": 0.5771812080536913,
+      "mean_accepted_per_round": 2.1864406779661016,
+      "target_forward_calls": 126,
+      "draft_forward_calls": 508,
+      "tokens_generated": 384
+    },
+    {
+      "mode": "speculative",
+      "k": 6,
+      "sec_total": 23.320290765000095,
+      "tok_per_s": 16.46634700525778,
+      "speedup_vs_greedy_cache": 0.6465376992481167,
+      "peak_MiB": 4087.873046875,
+      "all_tokens_equal": true,
+      "prompts_equal": "8/8",
+      "mismatches": [],
+      "acceptance_rate": 0.49731663685152055,
+      "mean_accepted_per_round": 2.836734693877551,
+      "target_forward_calls": 106,
+      "draft_forward_calls": 600,
+      "tokens_generated": 384
+    }
+  ]
+}
