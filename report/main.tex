@@ -36,7 +36,7 @@ Matching patients to clinical trials requires judging each inclusion and exclusi
 
 \section{Data and Split}
 We use only the expert columns (\texttt{expert\_eligibility}, \texttt{expert\_sentences}); the GPT-4 columns and the original \texttt{training} flag are never read. The dataset has 1015 criterion annotations from 53 patients. Patients (not rows) are split to avoid leakage: sorted unique patient IDs are shuffled with \texttt{numpy.random.default\_rng(42)} and divided 37/8/8, giving 603/206/206 annotations; assertions confirm that no patient appears in two splits and the manifest is committed. Table~\ref{tab:labels} shows the label distribution, which is strongly imbalanced: some classes have only 1--3 examples in validation and test, so per-class numbers are noisy. Prompts plus answers have at most 562 tokens (mean 267), so no truncation occurs at the 1024-token limit.
-\begin{table}[t]\centering\caption{Label counts per split (inclusion / exclusion criteria).}\label{tab:labels}\sm
+\begin{table}[!htb]\centering\caption{Label counts per split (inclusion / exclusion criteria).}\label{tab:labels}\sm
 \safeinput{labels}\end{table}
 
 \section{Model Selection and Resources}
@@ -84,13 +84,13 @@ Overall and per criterion type: accuracy, macro-F1 (over classes present in the 
 All models are evaluated on identical validation and test records with greedy decoding (\texttt{do\_sample=False}), at most 64 new tokens, batch size 8, fp16; a full test pass takes about 27 s on the T4. The same prompt is used before and after fine-tuning, so the base model's low score also reflects format-following failures (parse failures count as wrong). Records with empty gold evidence are handled as described under Metrics.
 \subsection{Before vs.\ after fine-tuning}
 Table~\ref{tab:val} (validation) and Table~\ref{tab:test} (test, evaluated once after model selection) compare the base model with fine-tuned variants. The final model is v1 (plain LoRA), chosen on validation accuracy and validation loss before any test evaluation. The oversampled variant v2 has slightly higher validation macro-F1 and evidence F1 but lower accuracy; on test it again trades accuracy (0.714 vs 0.748) and exclusion macro-F1 for higher evidence precision. Given supports of 1--3 for rare classes these differences are within noise, and we did not switch models after seeing test results. Evidence results are in Table~\ref{tab:evid}; the high per-record macro F1 is inflated by records whose gold evidence is empty.
-\begin{table*}[t]\centering\caption{Validation results.}\label{tab:val}\sm\safeinput{summary_val}\end{table*}
-\begin{table*}[t]\centering\caption{Test results (single evaluation).}\label{tab:test}\sm\safeinput{summary_test}\end{table*}
-\begin{table*}[t]\centering\caption{Evidence-sentence metrics, test split (see also the validation analogue in the repo).}\label{tab:evid}\sm\safeinput{evidence_test}\end{table*}
+\begin{table}[!htb]\centering\caption{Validation results.}\label{tab:val}\scriptsize\setlength{\tabcolsep}{2pt}\resizebox{\columnwidth}{!}{\safeinput{summary_val}}\end{table}
+\begin{table}[!htb]\centering\caption{Test results (single evaluation).}\label{tab:test}\scriptsize\setlength{\tabcolsep}{2pt}\resizebox{\columnwidth}{!}{\safeinput{summary_test}}\end{table}
+\begin{table}[!htb]\centering\caption{Evidence-sentence metrics, test split.}\label{tab:evid}\scriptsize\setlength{\tabcolsep}{2pt}\resizebox{\columnwidth}{!}{\safeinput{evidence_test}}\end{table}
 
 \subsection{Per-class behaviour}
 Table~\ref{tab:pc} and Fig.~\ref{fig:cm} show per-class scores and confusion matrices on the test split for the final model. Majority classes (\emph{included}, \emph{not excluded}, inclusion \emph{not enough information}) are learned. The clearest failure is exclusion \emph{not enough information}: recall is 0.04 (28 gold cases, almost all predicted \emph{not excluded}), so the model treats missing information as absence of the exclusion condition. \emph{Not included} (7) and inclusion \emph{not applicable} (3) are never predicted correctly. The test split contains no \emph{excluded} case, so that class has no support there (validation had 2, also missed). Classes with a handful of examples are unreliable, since one example moves their F1 in large steps.
-\begin{table}[t]\centering\caption{Per-class results, final model, test.}\label{tab:pc}\scriptsize\setlength{\tabcolsep}{3pt}\safeinput{perclass_test}\end{table}
+\begin{table}[!htb]\centering\caption{Per-class results, final model, test.}\label{tab:pc}\scriptsize\setlength{\tabcolsep}{3pt}\safeinput{perclass_test}\end{table}
 \begin{figure*}[t]\centering\safefig{cm_test}{0.8\textwidth}{}\caption{Test confusion matrices (counts; colour is row-normalised).}\label{fig:cm}\end{figure*}
 
 \subsection{Error analysis}
@@ -103,14 +103,14 @@ Table~\ref{tab:err} lists twelve test errors chosen automatically from distinct 
 
 \section{Tiled Attention}
 \texttt{tiled\_attention} processes queries and keys in blocks keeping a running row maximum $m$, normaliser $\ell$ and accumulator $a$: for each key block with scores $S$, $m'=\max(m,\max S)$, $\ell\leftarrow \ell e^{m-m'}+\sum e^{S-m'}$, $a\leftarrow a e^{m-m'}+e^{S-m'}V$, and the output is $a/\ell$ \cite{milakov}. It never materialises the full $T_q\times T_k$ matrix, skips fully masked causal blocks, supports $T_q<T_k$ via an offset, and guards $-\infty-(-\infty)$. Table~\ref{tab:at} cross-checks it against a stable reference softmax and PyTorch SDPA (\safeinput{attn_tests_note}).
-\begin{table}[t]\centering\caption{Tiled attention correctness (fp32).}\label{tab:at}\scriptsize\setlength{\tabcolsep}{3pt}\safeinput{attn_tests}\end{table}
+\begin{table}[!htb]\centering\caption{Tiled attention correctness (fp32).}\label{tab:at}\scriptsize\setlength{\tabcolsep}{3pt}\safeinput{attn_tests}\end{table}
 Table~\ref{tab:ab} and Fig.~\ref{fig:ab} give timing and peak extra memory. Our tiled version is written in PyTorch loops, so it is not expected to beat the fused SDPA kernel in time; its value is the memory behaviour and the verified algorithm.
-\begin{table}[t]\centering\caption{Attention timing / memory (batch 1, 12 heads, $D{=}128$).}\label{tab:ab}\scriptsize\safeinput{attn_bench}\end{table}
+\begin{table}[!htb]\centering\caption{Attention timing / memory (batch 1, 12 heads, $D{=}128$).}\label{tab:ab}\scriptsize\safeinput{attn_bench}\end{table}
 \begin{figure*}[t]\centering\safefig{attn_bench}{0.8\textwidth}{}\caption{Attention benchmark.}\label{fig:ab}\end{figure*}
 
 \section{Speculative Decoding}
 A 0.5B draft (same tokenizer, asserted in code) proposes $k$ tokens greedily; the 1.5B target verifies $[\text{last}]+\text{drafts}$ in one pass, the longest agreeing prefix is accepted, and the target's own next token is appended as correction or bonus token. Both caches are cropped to hold exactly the accepted sequence; the invariant at the start of a round is that both caches hold KV for all tokens but the last. Output is identical to the target's greedy output (8/8 prompts equal). Table~\ref{tab:sp} shows speculative decoding was \emph{slower} than cached greedy decoding (0.65--0.76$\times$): with a 1.5B target the draft is only 3$\times$ smaller, acceptance is 0.5--0.7, and each round pays draft and verification overhead plus cache cropping in Python, whereas a cached 1.5B step is already cheap. Larger target/draft ratios, higher acceptance or batched verification would be needed for a gain.
-\begin{table*}[t]\centering\caption{Speculative vs.\ greedy cached decoding (48 new tokens, 8 prompts).}\label{tab:sp}\scriptsize\safeinput{spec}\end{table*}
+\begin{table}[!htb]\centering\caption{Speculative vs.\ greedy cached decoding (48 new tokens, 8 prompts).}\label{tab:sp}\scriptsize\setlength{\tabcolsep}{2pt}\resizebox{\columnwidth}{!}{\safeinput{spec}}\end{table}
 
 \section{Application}
 \begin{figure*}[!t]\centering\safepng{app_screening}{0.62\textwidth}\caption{Screening tab: inputs, decoding mode, preliminary outcome and aggregation rule, and the per-criterion table with predictions, cited sentence IDs and evidence text.}\label{fig:shot1}\end{figure*}
