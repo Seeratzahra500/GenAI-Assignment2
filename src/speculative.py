@@ -69,7 +69,11 @@ def timed(fn, reps):
     return r, statistics.median(ts), peak
 
 def load(name, adapter, dtype):
-    m = AutoModelForCausalLM.from_pretrained(name, dtype=getattr(torch, dtype), device_map={"": 0})
+    """Loads on the GPU if there is one; otherwise on the CPU in float32 (fp16 is not reliable on CPU)."""
+    if torch.cuda.is_available():
+        m = AutoModelForCausalLM.from_pretrained(name, dtype=getattr(torch, dtype), device_map={"": 0})
+    else:
+        m = AutoModelForCausalLM.from_pretrained(name, dtype=torch.float32)
     if adapter:
         from peft import PeftModel; m = PeftModel.from_pretrained(m, adapter).merge_and_unload()
     return m.eval()
