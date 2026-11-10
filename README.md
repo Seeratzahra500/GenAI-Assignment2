@@ -1,6 +1,6 @@
 # Generative AI – Assignment 2: Clinical-trial criterion eligibility with a LoRA-tuned decoder
 
-Author: Rida Zubair (23i-2590), FAST-NUCES Islamabad. Individual assignment.
+Author: Seerat E Zahra (23i-0640), FAST-NUCES Islamabad. Individual assignment.
 
 Task: given a patient note and one trial criterion (inclusion or exclusion), predict the eligibility label and the supporting sentence IDs
 (`{"label": "...", "evidence": [ids]}`). Dataset: `ncbi/TrialGPT-Criterion-Annotations` (only expert columns are used; GPT-4 columns and the original `training` flag are never read).
