@@ -6,7 +6,7 @@ Task: given a patient note and one trial criterion (inclusion or exclusion), pre
 (`{"label": "...", "evidence": [ids]}`). Dataset: `ncbi/TrialGPT-Criterion-Annotations` (only expert columns are used; GPT-4 columns and the original `training` flag are never read).
 
 * Target model: `Qwen/Qwen2.5-1.5B-Instruct` + LoRA (r=16, alpha=32). Draft model for speculative decoding: `Qwen/Qwen2.5-0.5B-Instruct` + LoRA (same tokenizer).
-* Adapters (Hugging Face): [Qwen2.5-1.5B LoRA (target)](https://huggingface.co/Seerat500/trialgpt-qwen2.5-1.5b-lora) · [Qwen2.5-0.5B LoRA (draft)](https://huggingface.co/Seerat500/trialgpt-qwen2.5-0.5b-draft-lora)   · Demo video: **ADD LINK**   · Report: `report/23i-0640_GenAI_Assignment2_Report.pdf`
+* Adapters (Hugging Face): [Qwen2.5-1.5B LoRA (target)](https://huggingface.co/Seerat500/trialgpt-qwen2.5-1.5b-lora) · [Qwen2.5-0.5B LoRA (draft)](https://huggingface.co/Seerat500/trialgpt-qwen2.5-0.5b-draft-lora)   · Demo video: [Google Drive](https://drive.google.com/file/d/169ev9q6hpA1AWPtlPccgV_qdr5nmnKFD/view?usp=sharing)   · Report: `report/23i-0640_GenAI_Assignment2_Report.pdf`
 
 ## Layout
 | Path | Purpose |
