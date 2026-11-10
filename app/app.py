@@ -14,7 +14,11 @@ ap.add_argument("--draft", default="Qwen/Qwen2.5-0.5B-Instruct")
 ap.add_argument("--draft_adapter", default="Seerat500/trialgpt-qwen2.5-0.5b-draft-lora")
 ap.add_argument("--port", type=int, default=7860)
 ap.add_argument("--share", action="store_true")
+ap.add_argument("--n_new", type=int, default=64, help="max new tokens per answer (lower it on CPU)")
+ap.add_argument("--host", default="127.0.0.1")
 args = ap.parse_args()
+DEV = "cuda" if torch.cuda.is_available() else "cpu"
+print(f"Device: {DEV}" + ("" if DEV == "cuda" else " (no GPU found: float32 on CPU, expect roughly 10-60 s per criterion)"), flush=True)
 
 print("Loading models (first start downloads weights) ...", flush=True)
 TOK = AutoTokenizer.from_pretrained(args.target)
@@ -27,7 +31,7 @@ SYSTEM = "You are a clinical trial eligibility assistant. Use only the patient n
 LABELS = {"inclusion": ["included", "not included", "not enough information", "not applicable"],
           "exclusion": ["excluded", "not excluded", "not enough information", "not applicable"]}
 MODES = ["KV cache (greedy)", "No cache (reference greedy)", "Speculative decoding (greedy)"]
-N_NEW, MAX_PROMPT_TOKENS = 64, 1400
+N_NEW, MAX_PROMPT_TOKENS = args.n_new, 1400
 COLS = ["#", "Type", "Criterion", "Prediction", "Evidence IDs", "Evidence text", "Seconds"]
 EMPTY = pd.DataFrame(columns=COLS)
 DISCLAIMER = ("**Educational screening prototype, not a clinical enrollment decision.** Outputs come from a small "
@@ -77,7 +81,7 @@ def prepare(note, inc, exc):
 
 def encode(numbered, ctype, ctext):
     x = {"system": SYSTEM, "prompt": build_prompt(numbered, ctype, ctext)}
-    return TOK(chat_prompt(TOK, x), add_special_tokens=False, return_tensors="pt").input_ids.cuda()
+    return TOK(chat_prompt(TOK, x), add_special_tokens=False, return_tensors="pt").input_ids.to(DEV)
 
 def decode(mode, ids, k):
     if mode == MODES[0]: return generate_cached(TARGET, ids, N_NEW)[0]
@@ -153,13 +157,13 @@ def bench(note, inc, exc, ks_sel, reps):
     ctype, ctext = prep["crit"][0]
     ids = encode(prep["numbered"], ctype, ctext)
     if ids.shape[1] > MAX_PROMPT_TOKENS: return "Input too long.", pd.DataFrame(), pd.DataFrame()
-    n = 48
+    n = min(48, N_NEW)
     def run(fn):
         fn(); ts, peak, out = [], 0, None                      # one warm-up, not counted
         for _ in range(int(reps)):
-            torch.cuda.reset_peak_memory_stats(); sync(); t = time.perf_counter()
+            (torch.cuda.reset_peak_memory_stats() if DEV == "cuda" else None); sync(); t = time.perf_counter()
             out = fn(); sync(); ts.append(time.perf_counter() - t)
-            peak = max(peak, torch.cuda.max_memory_allocated() / 2**20)
+            peak = max(peak, torch.cuda.max_memory_allocated() / 2**20 if DEV == "cuda" else float("nan"))
         return out, statistics.median(ts), peak
     rows = []
     with LOCK:
@@ -227,4 +231,4 @@ with gr.Blocks(title="Clinical Trial Eligibility Screener") as demo:
         gr.Markdown("Criterion-level results on the fixed 8-patient test split (206 annotations), loaded from `outputs/`.")
         gr.Dataframe(value=stored_results(), interactive=False)
 
-demo.queue(max_size=8).launch(server_name="0.0.0.0", server_port=args.port, share=args.share)
+demo.queue(max_size=8).launch(server_name=args.host, server_port=args.port, share=args.share)
