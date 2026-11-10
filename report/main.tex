@@ -1,4 +1,5 @@
 \documentclass[conference]{IEEEtran}
+\usepackage{float}
 \usepackage{booktabs,graphicx,amsmath,amssymb,cite,url,array,xcolor,tikz}
 \usetikzlibrary{arrows.meta,positioning,fit}
 \usepackage[T1]{fontenc}
@@ -57,24 +58,24 @@ Qwen2.5-1.5B \cite{qwen25} was chosen because it is Apache-2.0, small enough for
 \section{Method}
 \subsection{Task format}
 Fig.~\ref{fig:arch} summarises the system.
-\begin{figure*}[t]\centering
-\begin{tikzpicture}[font=\scriptsize,node distance=7mm,box/.style={draw,rounded corners,align=center,minimum height=8mm,inner sep=3pt},arr/.style={-{Stealth[length=2mm]}}]
+\begin{figure}[H]\centering
+\resizebox{\columnwidth}{!}{\begin{tikzpicture}[font=\scriptsize,node distance=5mm,box/.style={draw,rounded corners,align=center,minimum height=8mm,inner sep=3pt},arr/.style={-{Stealth[length=2mm]}}]
 \node[box](in){Patient note\\(numbered sentences)\\+ criterion type/text};
 \node[box,right=of in](tok){Qwen tokenizer\\+ chat prompt};
 \node[box,right=of tok,fill=blue!8](tgt){Qwen2.5-1.5B\\+ LoRA (target)};
-\node[box,right=of tgt](dec){Decoding mode:\\no cache / KV cache /\\speculative};
-\node[box,right=of dec](out){JSON output\\\{label, evidence IDs\}};
-\node[box,right=of out](app){Gradio app:\\table, evidence text,\\report, benchmark};
+\node[box,below=7mm of tgt](dec){Decoding mode:\\no cache / KV cache /\\speculative};
+\node[box,left=of dec](out){JSON output\\\{label, evidence IDs\}};
+\node[box,left=of out](app){Gradio app:\\table, evidence text,\\report, benchmark};
 \node[box,below=6mm of dec,fill=green!8](drf){Qwen2.5-0.5B + LoRA\\(draft)};
 \draw[arr](in)--(tok);\draw[arr](tok)--(tgt);\draw[arr](tgt)--(dec);\draw[arr](dec)--(out);\draw[arr](out)--(app);
 \draw[arr](drf)--node[right]{proposals}(dec);
-\end{tikzpicture}
-\caption{System overview: prompt construction, the LoRA-tuned target, the three decoding paths (the draft is used only in speculative mode) and the application.}\label{fig:arch}\end{figure*}
+\end{tikzpicture}}
+\caption{System overview: prompt construction, the LoRA-tuned target, the three decoding paths (the draft is used only in speculative mode) and the application.}\label{fig:arch}\end{figure}
 
 A chat prompt contains the numbered note, the criterion type and text, the allowed labels for that type, and asks for JSON only: \texttt{\{"label": ..., "evidence": [ids]\}}. Inclusion labels are \emph{included, not included, not enough information, not applicable}; exclusion labels are \emph{excluded, not excluded, not enough information, not applicable}. Outputs are parsed strictly; unparsable or out-of-vocabulary outputs are counted as the label ``invalid'' (wrong), never silently repaired.
 \subsection{LoRA fine-tuning}
 The target is Qwen2.5-1.5B-Instruct \cite{qwen25}. LoRA adapters (rank 16, $\alpha{=}32$, dropout 0.05) are placed on all linear projections. Loss is computed on the answer tokens only. Settings: lr $2\times10^{-4}$ with cosine decay and 6 warm-up steps, 3 epochs, per-device batch 1 with 16 accumulation steps, fp16 autocast with fp32 adapter weights, gradient checkpointing, seed 42. The checkpoint with the lowest validation loss is kept (step 80). A second variant (v2) oversamples rare classes; it was trained for comparison and is reported below. A 0.5B draft adapter was trained with the same recipe for speculative decoding. Fig.~\ref{fig:curves} shows the training curves.
-\begin{figure*}[t]\centering\safefig{train_curves}{0.95\textwidth}{}\caption{Training and validation loss (log scale); dotted line marks the selected checkpoint.}\label{fig:curves}\end{figure*}
+\begin{figure}[H]\centering\safefig{train_curves}{\columnwidth}{}\caption{Training and validation loss (log scale); dotted line marks the selected checkpoint.}\label{fig:curves}\end{figure}
 
 \subsection{Metrics}
 Overall and per criterion type: accuracy, macro-F1 (over classes present in the gold labels of that split), per-class precision/recall/F1 and confusion matrices. Evidence is scored on sentence-ID sets with micro P/R/F1 over all records and a per-record macro average in which an empty gold set matched by an empty prediction counts as correct. Because many records have empty gold evidence, we also report micro metrics restricted to non-empty gold.
@@ -91,7 +92,7 @@ Table~\ref{tab:val} (validation) and Table~\ref{tab:test} (test, evaluated once 
 \subsection{Per-class behaviour}
 Table~\ref{tab:pc} and Fig.~\ref{fig:cm} show per-class scores and confusion matrices on the test split for the final model. Majority classes (\emph{included}, \emph{not excluded}, inclusion \emph{not enough information}) are learned. The clearest failure is exclusion \emph{not enough information}: recall is 0.04 (28 gold cases, almost all predicted \emph{not excluded}), so the model treats missing information as absence of the exclusion condition. \emph{Not included} (7) and inclusion \emph{not applicable} (3) are never predicted correctly. The test split contains no \emph{excluded} case, so that class has no support there (validation had 2, also missed). Classes with a handful of examples are unreliable, since one example moves their F1 in large steps.
 \begin{table}[!htb]\centering\caption{Per-class results, final model, test.}\label{tab:pc}\scriptsize\setlength{\tabcolsep}{3pt}\safeinput{perclass_test}\end{table}
-\begin{figure*}[t]\centering\safefig{cm_test}{0.8\textwidth}{}\caption{Test confusion matrices (counts; colour is row-normalised).}\label{fig:cm}\end{figure*}
+\begin{figure}[H]\centering\safefig{cm_test}{\columnwidth}{}\caption{Test confusion matrices (counts; colour is row-normalised).}\label{fig:cm}\end{figure}
 
 \subsection{Error analysis}
 Table~\ref{tab:err} lists twelve test errors chosen automatically from distinct (gold, predicted) groups, at most two per group and patient. The recurring categories are: (i) a failed inclusion criterion not recognised, so \emph{not included} becomes \emph{not enough information} (rows 1--2); (ii) missing information treated as absence, so \emph{not enough information} becomes \emph{not excluded}; (iii) non-applicability not recognised, e.g.\ breast-feeding, birth-control or prior-tonsillectomy criteria answered as \emph{not excluded} or \emph{not enough information} (rows 3--6); (iv) correct label with wrong or missing cited sentences (rows 11--12); (v) over-caution, where an \emph{included} criterion is answered \emph{not enough information} (row 10), and the opposite over-confidence, where \emph{not enough information} is answered \emph{included} (row 9). In several rows the model cites no sentence at all although the gold evidence is non-empty, which matches the low evidence recall (0.52).
@@ -106,16 +107,16 @@ Table~\ref{tab:err} lists twelve test errors chosen automatically from distinct 
 \begin{table}[!htb]\centering\caption{Tiled attention correctness (fp32).}\label{tab:at}\scriptsize\setlength{\tabcolsep}{3pt}\safeinput{attn_tests}\end{table}
 Table~\ref{tab:ab} and Fig.~\ref{fig:ab} give timing and peak extra memory. Our tiled version is written in PyTorch loops, so it is not expected to beat the fused SDPA kernel in time; its value is the memory behaviour and the verified algorithm.
 \begin{table}[!htb]\centering\caption{Attention timing / memory (batch 1, 12 heads, $D{=}128$).}\label{tab:ab}\scriptsize\safeinput{attn_bench}\end{table}
-\begin{figure*}[t]\centering\safefig{attn_bench}{0.8\textwidth}{}\caption{Attention benchmark.}\label{fig:ab}\end{figure*}
+\begin{figure}[H]\centering\safefig{attn_bench}{\columnwidth}{}\caption{Attention benchmark.}\label{fig:ab}\end{figure}
 
 \section{Speculative Decoding}
 A 0.5B draft (same tokenizer, asserted in code) proposes $k$ tokens greedily; the 1.5B target verifies $[\text{last}]+\text{drafts}$ in one pass, the longest agreeing prefix is accepted, and the target's own next token is appended as correction or bonus token. Both caches are cropped to hold exactly the accepted sequence; the invariant at the start of a round is that both caches hold KV for all tokens but the last. Output is identical to the target's greedy output (8/8 prompts equal). Table~\ref{tab:sp} shows speculative decoding was \emph{slower} than cached greedy decoding (0.65--0.76$\times$): with a 1.5B target the draft is only 3$\times$ smaller, acceptance is 0.5--0.7, and each round pays draft and verification overhead plus cache cropping in Python, whereas a cached 1.5B step is already cheap. Larger target/draft ratios, higher acceptance or batched verification would be needed for a gain.
 \begin{table}[!htb]\centering\caption{Speculative vs.\ greedy cached decoding (48 new tokens, 8 prompts).}\label{tab:sp}\scriptsize\setlength{\tabcolsep}{2pt}\resizebox{\columnwidth}{!}{\safeinput{spec}}\end{table}
 
 \section{Application}
-\begin{figure*}[!t]\centering\safepng{app_screening}{0.62\textwidth}\caption{Screening tab: inputs, decoding mode, preliminary outcome and aggregation rule, and the per-criterion table with predictions, cited sentence IDs and evidence text.}\label{fig:shot1}\end{figure*}
-\begin{figure*}[!t]\centering\safepng{app_benchmark}{0.78\textwidth}\caption{Inference benchmark tab: the first criterion decoded live without cache, with the KV cache and with speculative decoding ($k=2,4$); tokens match the no-cache reference in every mode.}\label{fig:shot2}\end{figure*}
 The Gradio application has three tabs. (1) \emph{Screening}: the user pastes a patient description (plain text or dataset-style numbered sentences) and enters inclusion and exclusion criteria, one per line; a dropdown selects the decoding mode (KV cache, no-cache reference, speculative with adjustable $k$). The result shows, per criterion, the predicted category, cited sentence IDs, the exact evidence text, the raw model output and the time taken, followed by a preliminary outcome computed by an explicit rule (not a ground-truth verdict), and a downloadable Markdown report with provenance (models, adapters, decoding mode, timestamp, sentence handling). (2) \emph{Inference benchmark}: runs the first criterion live through no-cache, KV-cache and speculative decoding and reports time, tokens/s, speed-up, peak GPU memory, token equality with the reference, acceptance rate and target passes. (3) \emph{Held-out test results}: loads the stored test metrics. Invalid inputs (empty or too short notes, over-long input) raise a clear message and the app stays usable. A prominent notice states that this is an educational prototype, not a clinical enrolment decision (Figs.~\ref{fig:shot1} and~\ref{fig:shot2}).
+\begin{figure}[H]\centering\safepng{app_screening}{\columnwidth}\caption{Screening tab: inputs, decoding mode, preliminary outcome and aggregation rule, and the per-criterion table with predictions, cited sentence IDs and evidence text.}\label{fig:shot1}\end{figure}
+\begin{figure}[H]\centering\safepng{app_benchmark}{\columnwidth}\caption{Inference benchmark tab: the first criterion decoded live without cache, with the KV cache and with speculative decoding ($k=2,4$); tokens match the no-cache reference in every mode.}\label{fig:shot2}\end{figure}
 \textbf{Startup.} The app is launched locally with \texttt{python app/app.py} and opened at \texttt{http://127.0.0.1:7860}; it downloads the base models and the published adapters and uses the GPU if present, otherwise the CPU. No notebook is needed. Exact steps are in the repository README.
 
 \section{Limitations}
