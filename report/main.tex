@@ -1,10 +1,12 @@
 \documentclass[conference]{IEEEtran}
-\usepackage{booktabs,graphicx,amsmath,amssymb,cite,url,array,xcolor}
+\usepackage{booktabs,graphicx,amsmath,amssymb,cite,url,array,xcolor,tikz}
+\usetikzlibrary{arrows.meta,positioning,fit}
 \usepackage[T1]{fontenc}
 \graphicspath{{figures/}}
 % include generated fragments; show a visible TODO if one is missing
 \newcommand{\safeinput}[1]{\IfFileExists{generated/#1.tex}{\input{generated/#1.tex}}{\textbf{\color{red}[TODO: generated/#1.tex missing -- run src/report\_assets.py]}}}
 \newcommand{\safefig}[3]{\IfFileExists{figures/#1.pdf}{\includegraphics[width=#2]{#1}}{\textbf{\color{red}[TODO: figure #1 missing]}}}
+\newcommand{\safepng}[2]{\IfFileExists{figures/#1.png}{\includegraphics[width=#2]{figures/#1.png}}{\textbf{\color{red}[TODO: add screenshot figures/\detokenize{#1}.png]}}}
 \newcommand{\todo}[1]{\textbf{\color{red}[TODO: #1]}}
 \newcommand{\sm}{\small}
 \begin{document}
@@ -25,13 +27,49 @@ LoRA, clinical trial matching, KV cache, online softmax, speculative decoding
 \section{Introduction}
 Matching patients to clinical trials requires judging each inclusion and exclusion criterion against a free-text note. TrialGPT \cite{trialgpt} showed that LLMs can do this and released expert criterion-level annotations. We study whether a small open-weight decoder, adapted with LoRA \cite{lora} on a single 16~GB GPU, can learn the task, and we implement the decoding machinery (KV cache, tiled attention \cite{flash,milakov}, speculative decoding \cite{leviathan,chen}) ourselves so that every component can be verified against a reference.
 
+\section{Related Work}
+\textbf{Clinical trial matching.} TrialGPT \cite{trialgpt} decomposes matching into criterion-level eligibility labels with evidence sentences and uses GPT-4 prompting; its expert annotations are the benchmark used here, while its GPT-4 outputs are never used as input or for evaluation. Prompting a large proprietary model is accurate but not locally executable, so we instead adapt a small open-weight decoder.
+\textbf{Parameter-efficient adaptation.} LoRA \cite{lora} freezes the base weights and trains low-rank updates, which fits a 1.5B model on one 16~GB GPU; QLoRA \cite{qlora} additionally quantises the base weights, which we did not need at this scale.
+\textbf{Efficient attention.} Standard attention materialises a $T\times T$ score matrix. Online softmax \cite{milakov} and its blocked use in memory-efficient attention \cite{rabe} and FlashAttention \cite{flash} compute exact attention with $O(T)$ extra memory; FlashAttention fuses this into one GPU kernel. Our PyTorch version reproduces the algorithm for verification, not for speed.
+\textbf{Inference.} Caching keys and values removes the quadratic recomputation during generation \cite{pope}; grouped-query attention \cite{gqa} shrinks the cache (Qwen2.5-1.5B has 2 KV heads for 12 query heads), and rotary position embeddings \cite{rope} make explicit position handling necessary when a cache is reused. Speculative decoding \cite{leviathan,chen} lets a small draft model propose tokens that the target verifies in one pass, giving the target's exact greedy output; gains depend on the draft/target cost ratio and acceptance rate.
+
 \section{Data and Split}
 We use only the expert columns (\texttt{expert\_eligibility}, \texttt{expert\_sentences}); the GPT-4 columns and the original \texttt{training} flag are never read. The dataset has 1015 criterion annotations from 53 patients. Patients (not rows) are split to avoid leakage: sorted unique patient IDs are shuffled with \texttt{numpy.random.default\_rng(42)} and divided 37/8/8, giving 603/206/206 annotations; assertions confirm that no patient appears in two splits and the manifest is committed. Table~\ref{tab:labels} shows the label distribution, which is strongly imbalanced: some classes have only 1--3 examples in validation and test, so per-class numbers are noisy. Prompts plus answers have at most 562 tokens (mean 267), so no truncation occurs at the 1024-token limit.
 \begin{table}[t]\centering\caption{Label counts per split (inclusion / exclusion criteria).}\label{tab:labels}\sm
 \safeinput{labels}\end{table}
 
+\section{Model Selection and Resources}
+We required an open-weight, locally executable decoder that fits LoRA training on a free Kaggle Tesla~T4 (16~GB) and has a smaller sibling with the same tokenizer for speculative decoding. Table~\ref{tab:cand} compares candidates.
+\begin{table*}[t]\centering\caption{Candidate decoders (weights in fp16 $\approx 2$ bytes/parameter; Llama figures from its model card).}\label{tab:cand}\scriptsize
+\begin{tabular}{lrrrrrll}\toprule
+Model & Params & Layers & Q/KV heads & Context & fp16 weights & Licence & Verdict \\ \midrule
+Qwen2.5-1.5B-Instruct & 1.54B & 28 & 12/2 & 32768 & 3.1 GB & Apache-2.0 & \textbf{chosen (target)} \\
+Qwen2.5-0.5B-Instruct & 0.49B & 24 & 14/2 & 32768 & 1.0 GB & Apache-2.0 & chosen (draft) \\
+Llama-3.2-1B-Instruct & 1.24B & 16 & 32/8 & 131072 & 2.5 GB & Llama community & rejected: gated, different tokenizer family \\
+Phi-3-mini-4k-instruct & 3.82B & 32 & 32/32 & 4096 & 7.6 GB & MIT & rejected: LoRA training too tight on 16 GB, no small same-tokenizer draft \\
+\bottomrule\end{tabular}\end{table*}
+Qwen2.5-1.5B \cite{qwen25} was chosen because it is Apache-2.0, small enough for fp16 LoRA training with gradient checkpointing, supports a 32k context (our longest example is 562 tokens), and shares its 151{,}936-token vocabulary with Qwen2.5-0.5B, which makes the 0.5B model a valid draft (the code asserts identical tokenizers). Its KV cache costs $2\cdot 28\cdot 2\cdot 128\cdot 2=28{,}672$ bytes per token (28 layers, 2 KV heads, head dimension 128, fp16), i.e.\ about 4 MiB for 144 tokens, which matches the 3.94 MiB we measured.
+\textbf{Resources.} All experiments ran on a Kaggle Tesla~T4 with 16~GB; fp16 weights occupy about 2.9 GiB for the target and about 3.8 GiB with the draft loaded. LoRA training took about 18 min (v1) and 25 min (v2). A batch of 4 ran out of memory, so training uses batch 1 with 16 accumulation steps and gradient checkpointing. No paid service was used.
+\subsection{Alternatives, difficulties and decisions}
+(i) We trained a second variant that oversamples rare classes threefold (v2); it helps evidence precision but not accuracy, and v1 stays final. (ii) fp16 can flip argmax on near-tied logits, so cached and uncached outputs can diverge although both are correct; we confirmed this with an fp32 re-run. (iii) A first cache-based speculative implementation raised an error in \texttt{DynamicCache.crop} when given a positive length; cropping is now done through a small helper that crops by the number of rejected positions. (iv) A dependency conflict between \texttt{torchao} and PEFT required removing \texttt{torchao}.
+
 \section{Method}
 \subsection{Task format}
+Fig.~\ref{fig:arch} summarises the system.
+\begin{figure*}[t]\centering
+\begin{tikzpicture}[font=\scriptsize,node distance=7mm,box/.style={draw,rounded corners,align=center,minimum height=8mm,inner sep=3pt},arr/.style={-{Stealth[length=2mm]}}]
+\node[box](in){Patient note\\(numbered sentences)\\+ criterion type/text};
+\node[box,right=of in](tok){Qwen tokenizer\\+ chat prompt};
+\node[box,right=of tok,fill=blue!8](tgt){Qwen2.5-1.5B\\+ LoRA (target)};
+\node[box,right=of tgt](dec){Decoding mode:\\no cache / KV cache /\\speculative};
+\node[box,right=of dec](out){JSON output\\\{label, evidence IDs\}};
+\node[box,right=of out](app){Gradio app:\\table, evidence text,\\report, benchmark};
+\node[box,below=6mm of dec,fill=green!8](drf){Qwen2.5-0.5B + LoRA\\(draft)};
+\draw[arr](in)--(tok);\draw[arr](tok)--(tgt);\draw[arr](tgt)--(dec);\draw[arr](dec)--(out);\draw[arr](out)--(app);
+\draw[arr](drf)--node[right]{proposals}(dec);
+\end{tikzpicture}
+\caption{System overview: prompt construction, the LoRA-tuned target, the three decoding paths (the draft is used only in speculative mode) and the application.}\label{fig:arch}\end{figure*}
+
 A chat prompt contains the numbered note, the criterion type and text, the allowed labels for that type, and asks for JSON only: \texttt{\{"label": ..., "evidence": [ids]\}}. Inclusion labels are \emph{included, not included, not enough information, not applicable}; exclusion labels are \emph{excluded, not excluded, not enough information, not applicable}. Outputs are parsed strictly; unparsable or out-of-vocabulary outputs are counted as the label ``invalid'' (wrong), never silently repaired.
 \subsection{LoRA fine-tuning}
 The target is Qwen2.5-1.5B-Instruct \cite{qwen25}. LoRA adapters (rank 16, $\alpha{=}32$, dropout 0.05) are placed on all linear projections. Loss is computed on the answer tokens only. Settings: lr $2\times10^{-4}$ with cosine decay and 6 warm-up steps, 3 epochs, per-device batch 1 with 16 accumulation steps, fp16 autocast with fp32 adapter weights, gradient checkpointing, seed 42. The checkpoint with the lowest validation loss is kept (step 80). A second variant (v2) oversamples rare classes; it was trained for comparison and is reported below. A 0.5B draft adapter was trained with the same recipe for speculative decoding. Fig.~\ref{fig:curves} shows the training curves.
@@ -41,6 +79,8 @@ The target is Qwen2.5-1.5B-Instruct \cite{qwen25}. LoRA adapters (rank 16, $\alp
 Overall and per criterion type: accuracy, macro-F1 (over classes present in the gold labels of that split), per-class precision/recall/F1 and confusion matrices. Evidence is scored on sentence-ID sets with micro P/R/F1 over all records and a per-record macro average in which an empty gold set matched by an empty prediction counts as correct. Because many records have empty gold evidence, we also report micro metrics restricted to non-empty gold.
 
 \section{Results}
+\subsection{Experimental setup}
+All models are evaluated on identical validation and test records with greedy decoding (\texttt{do\_sample=False}), at most 64 new tokens, batch size 8, fp16; a full test pass takes about 27 s on the T4. The same prompt is used before and after fine-tuning, so the base model's low score also reflects format-following failures (parse failures count as wrong). Records with empty gold evidence are handled as described under Metrics.
 \subsection{Before vs.\ after fine-tuning}
 Table~\ref{tab:val} (validation) and Table~\ref{tab:test} (test, evaluated once after model selection) compare the base model with fine-tuned variants. The final model is v1 (plain LoRA), chosen on validation accuracy and validation loss before any test evaluation. The oversampled variant v2 has slightly higher validation macro-F1 and evidence F1 but lower accuracy; on test it again trades accuracy (0.714 vs 0.748) and exclusion macro-F1 for higher evidence precision. Given supports of 1--3 for rare classes these differences are within noise, and we did not switch models after seeing test results. Evidence results are in Table~\ref{tab:evid}; the high per-record macro F1 is inflated by records whose gold evidence is empty.
 \begin{table*}[t]\centering\caption{Validation results.}\label{tab:val}\sm\safeinput{summary_val}\end{table*}
@@ -57,7 +97,7 @@ Table~\ref{tab:err} lists twelve test errors chosen automatically from distinct 
 \begin{table*}[t]\centering\caption{Test errors of the final model (full text in \texttt{report/generated/errors.json}).}\label{tab:err}\scriptsize\safeinput{errors}\end{table*}
 
 \section{KV-Cache Decoder}
-\texttt{generate\_cached} runs an explicit prefill and then one token per step, passing explicit \texttt{position\_ids}, a growing attention mask and the carried cache; \texttt{generate\_nocache} recomputes the full sequence each step and is the reference. Table~\ref{tab:kv} compares them (greedy, batch 1, fixed number of new tokens, fp16). The speed-up grows with input length (1.1$\times$ at 128 tokens, 4.5$\times$ at 512 with 64 new tokens) because the reference cost grows with sequence length while a cached step does not; peak memory differs little at these lengths because weights dominate, and the KV cache itself is small (GQA with 2 KV heads). In one configuration (256 in / 64 new) the token streams diverge at step 20; an fp32 re-run was identical, so the divergence is an fp16 near-tie in the argmax, not a cache bug.
+\texttt{generate\_cached} runs an explicit prefill and then one token per step, passing explicit \texttt{position\_ids}, a growing attention mask and the carried cache; \texttt{generate\_nocache} recomputes the full sequence each step and is the reference. Table~\ref{tab:kv} compares them (greedy, batch 1, fixed number of new tokens, fp16, one warm-up run and the median of three timed runs with CUDA synchronisation). The speed-up grows with input length (1.1$\times$ at 128 tokens, 4.5$\times$ at 512 with 64 new tokens) because the reference cost grows with sequence length while a cached step does not; peak memory differs little at these lengths because weights dominate, and the KV cache itself is small (GQA with 2 KV heads). In one configuration (256 in / 64 new) the token streams diverge at step 20; an fp32 re-run was identical, so the divergence is an fp16 near-tie in the argmax, not a cache bug.
 \begin{table*}[t]\centering\caption{KV cache vs.\ no-cache reference.}\label{tab:kv}\scriptsize\safeinput{kv}\end{table*}
 
 \section{Tiled Attention}
@@ -72,7 +112,10 @@ A 0.5B draft (same tokenizer, asserted in code) proposes $k$ tokens greedily; th
 \begin{table*}[t]\centering\caption{Speculative vs.\ greedy cached decoding (48 new tokens, 8 prompts).}\label{tab:sp}\scriptsize\safeinput{spec}\end{table*}
 
 \section{Application}
-A Gradio app has three tabs: (1) \emph{Screening}: paste a note and criterion (or load a test example), choose a decoding mode (plain, KV cache, speculative), and see the label, evidence sentences and raw JSON; invalid inputs give a recoverable message. (2) \emph{Decoding comparison}: runs the modes side by side with latency, tokens/s and equality of outputs. (3) \emph{Results}: loads metric files and exports a report. Patient-level aggregation across criteria is an explicit rule shown to the user, not a ground-truth eligibility label. The app is labelled an educational prototype.
+The Gradio application has three tabs. (1) \emph{Screening}: the user pastes a patient description (plain text or dataset-style numbered sentences) and enters inclusion and exclusion criteria, one per line; a dropdown selects the decoding mode (KV cache, no-cache reference, speculative with adjustable $k$). The result shows, per criterion, the predicted category, cited sentence IDs, the exact evidence text, the raw model output and the time taken, followed by a preliminary outcome computed by an explicit rule (not a ground-truth verdict), and a downloadable Markdown report with provenance (models, adapters, decoding mode, timestamp, sentence handling). (2) \emph{Inference benchmark}: runs the first criterion live through no-cache, KV-cache and speculative decoding and reports time, tokens/s, speed-up, peak GPU memory, token equality with the reference, acceptance rate and target passes. (3) \emph{Held-out test results}: loads the stored test metrics. Invalid inputs (empty or too short notes, over-long input) raise a clear message and the app stays usable. A prominent notice states that this is an educational prototype, not a clinical enrolment decision (Figs.~\ref{fig:shot1} and~\ref{fig:shot2}).
+\textbf{Startup.} The app is launched locally with \texttt{python app/app.py} and opened at \texttt{http://127.0.0.1:7860}; it downloads the base models and the published adapters and uses the GPU if present, otherwise the CPU. No notebook is needed. Exact steps are in the repository README.
+\begin{figure}[t]\centering\safepng{app_screening}{0.95\columnwidth}\caption{Screening tab with per-criterion results, evidence and report download.}\label{fig:shot1}\end{figure}
+\begin{figure}[t]\centering\safepng{app_benchmark}{0.95\columnwidth}\caption{Inference benchmark tab comparing the three decoding paths live.}\label{fig:shot2}\end{figure}
 
 \section{Limitations}
 Only 53 patients; validation/test supports of 1--3 for rare classes make per-class scores noisy and differences between v1 and v2 within noise. Model selection used the validation split and test was evaluated once for the final model. Greedy fp16 decoding can differ across hardware on near-ties. The public app link exists only while the notebook session runs. No clinical validation was performed.
@@ -91,6 +134,11 @@ An AI assistant (Claude) was used for planning, writing and debugging code (trai
 \bibitem{milakov} M.~Milakov and N.~Gimelshein, ``Online normalizer calculation for softmax,'' arXiv:1805.02867, 2018.
 \bibitem{leviathan} Y.~Leviathan, M.~Kalman, and Y.~Matias, ``Fast inference from transformers via speculative decoding,'' in \emph{ICML}, 2023.
 \bibitem{chen} C.~Chen \emph{et al.}, ``Accelerating large language model decoding with speculative sampling,'' arXiv:2302.01318, 2023.
+\bibitem{qlora} T.~Dettmers \emph{et al.}, ``QLoRA: Efficient finetuning of quantized LLMs,'' in \emph{NeurIPS}, 2023.
+\bibitem{rabe} M.~N. Rabe and C.~Staats, ``Self-attention does not need $O(n^2)$ memory,'' arXiv:2112.05682, 2021.
+\bibitem{pope} R.~Pope \emph{et al.}, ``Efficiently scaling transformer inference,'' in \emph{MLSys}, 2023.
+\bibitem{gqa} J.~Ainslie \emph{et al.}, ``GQA: Training generalized multi-query transformer models from multi-head checkpoints,'' in \emph{EMNLP}, 2023.
+\bibitem{rope} J.~Su \emph{et al.}, ``RoFormer: Enhanced transformer with rotary position embedding,'' arXiv:2104.09864, 2021.
 \bibitem{qwen25} A.~Yang \emph{et al.}, ``Qwen2.5 technical report,'' arXiv:2412.15115, 2024.
 \end{thebibliography}
 \end{document}
