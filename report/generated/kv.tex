@@ -1,9 +1,9 @@
-\begin{tabular}{rrcrrrrrr}\toprule
-$T_{in}$ & $n$ & Tokens equal & Max $|\Delta$logit$|$ & tok/s no cache & tok/s cached & Speedup & Peak MiB (no cache/cached) & KV MiB \\ \midrule
-128 & 16 & yes & 0.031 & 22.7 & 25.3 & 1.1$\times$ & 3014/3016 & 3.9 \\
-128 & 64 & yes & 0.037 & 22.8 & 25.1 & 1.1$\times$ & 3102/3083 & 5.2 \\
-256 & 16 & yes & 0.109 & 14.0 & 24.7 & 1.8$\times$ & 3125/3096 & 7.4 \\
-256 & 64 & no (step 20) & 0.109 & 12.7 & 24.5 & 1.9$\times$ & 3139/3124 & 8.8 \\
-512 & 16 & yes & 0.055 & 6.4 & 22.9 & 3.6$\times$ & 3200/3182 & 14.4 \\
-512 & 64 & yes & 0.057 & 5.5 & 24.7 & 4.5$\times$ & 3214/3210 & 15.8 \\
+\begin{tabular}{rrcrrrrrrr}\toprule
+$T_{in}$ & $n$ & Tokens equal & Prefill ms (no cache / cache) & Decode tok/s (no cache) & Decode tok/s (cache) & Total tok/s (no cache / cache) & Speed-up & Peak MiB (no cache / cache) & KV MiB \\ \midrule
+128 & 16 & yes & 44 / 45 & 22.7 & 25.5 & 22.7 / 25.3 & 1.1$\times$ & 3014 / 3016 & 3.9 \\
+128 & 64 & yes & 44 / 45 & 22.8 & 25.1 & 22.8 / 25.1 & 1.1$\times$ & 3102 / 3083 & 5.2 \\
+256 & 16 & yes & 58 / 47 & 13.9 & 25.0 & 14.0 / 24.7 & 1.8$\times$ & 3125 / 3096 & 7.4 \\
+256 & 64 & no (step 20) & 60 / 49 & 12.6 & 24.6 & 12.7 / 24.5 & 1.9$\times$ & 3139 / 3124 & 8.8 \\
+512 & 16 & yes & 130 / 117 & 6.3 & 25.7 & 6.4 / 22.9 & 3.6$\times$ & 3200 / 3182 & 14.4 \\
+512 & 64 & yes & 147 / 137 & 5.5 & 25.7 & 5.5 / 24.7 & 4.5$\times$ & 3214 / 3210 & 15.8 \\
 \bottomrule\end{tabular}
