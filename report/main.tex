@@ -13,9 +13,7 @@
 \begin{document}
 \title{Fine-Tuning a Small Decoder for Clinical-Trial Criterion Eligibility, with a From-Scratch KV Cache, Tiled Attention and Speculative Decoding}
 \author{\IEEEauthorblockN{Seerat E Zahra (23i-0640)}
-\IEEEauthorblockA{FAST-NUCES Islamabad, Generative AI -- Assignment 2\\
-Code: \url{https://github.com/Seeratzahra500/GenAI-Assignment2}\\
-Adapters (Hugging Face): \url{https://huggingface.co/Seerat500/trialgpt-qwen2.5-1.5b-lora}\\ \url{https://huggingface.co/Seerat500/trialgpt-qwen2.5-0.5b-draft-lora}}}
+\IEEEauthorblockA{FAST-NUCES Islamabad, Generative AI -- Assignment 2}}
 \maketitle
 
 \begin{abstract}
@@ -120,7 +118,7 @@ The Gradio application has three tabs. (1) \emph{Screening}: the user pastes a p
 \textbf{Startup.} The app is launched locally with \texttt{python app/app.py} and opened at \texttt{http://127.0.0.1:7860}; it downloads the base models and the published adapters and uses the GPU if present, otherwise the CPU. No notebook is needed. Exact steps are in the repository README.
 
 \section{Limitations}
-Only 53 patients; validation/test supports of 1--3 for rare classes make per-class scores noisy and differences between v1 and v2 within noise. Model selection used the validation split and test was evaluated once for the final model. Greedy fp16 decoding can differ across hardware on near-ties. The public app link exists only while the notebook session runs. No clinical validation was performed.
+Only 53 patients; validation/test supports of 1--3 for rare classes make per-class scores noisy and differences between v1 and v2 within noise. Model selection used the validation split and test was evaluated once for the final model. \textbf{Compute and memory limits.} Everything ran on one 16~GB Tesla~T4 with fp16 weights; batch 4 already ran out of memory in training, so we used batch 1 with 16 accumulation steps and gradient checkpointing, and the 1.5B target plus 0.5B draft leave little headroom for long contexts. A naive $T\times T$ attention matrix needs 2352~MiB at $T{=}4096$ (versus 37~MiB tiled) and the KV cache grows by 28{,}672 bytes per token, so memory, not compute, bounds context length. Our tiled attention is written in PyTorch loops and is slower than the fused SDPA kernel, and speculative decoding was slower than plain KV-cache decoding in our measurements (0.65--0.76$\times$). Greedy fp16 decoding can differ across hardware on near-ties. The public app link exists only while the notebook session runs. No clinical validation was performed.
 
 \section{Conclusion}
 LoRA fine-tuning makes a 1.5B decoder usable for criterion-level eligibility labelling (test accuracy 0.107 $\rightarrow$ 0.748, macro-F1 0.141 $\rightarrow$ 0.550), but rare classes, exclusion criteria with missing information, and evidence selection remain hard. The KV cache gives up to 4.5$\times$ speed-up at 512 tokens, tiled attention matches the reference to float precision, and speculative decoding preserved outputs but did not speed things up here.
@@ -128,6 +126,9 @@ LoRA fine-tuning makes a 1.5B decoder usable for criterion-level eligibility lab
 \appendices
 \section{AI-Use Statement}
 I used Anthropic's Claude as a coding and writing assistant. It helped plan the pipeline and model choice, wrote first drafts of the training, evaluation, KV-cache, tiled-attention, speculative-decoding and Gradio code and of the figure/table scripts, and drafted the first version of this text. I ran every training, evaluation and benchmark job myself on Kaggle (Tesla T4); all numbers in this report come from the JSON files in \texttt{outputs/} produced by those runs, not from AI-written text. I selected the final model on validation metrics before looking at the test set. When AI-written code failed (missing-file and path errors, a \texttt{torchao}/\texttt{peft} conflict, CPU/GPU device handling in the app) I re-ran it and debugged it with the assistant until it worked. I tested the application, read the error examples against the stored predictions, and recorded the demo. I can explain and modify each component in the live defense.
+
+\section{Code, Model and Demo Availability}
+Source code, split manifest, logs and reproduction instructions: \url{https://github.com/Seeratzahra500/GenAI-Assignment2}. LoRA adapters on Hugging Face: target \url{https://huggingface.co/Seerat500/trialgpt-qwen2.5-1.5b-lora}, draft \url{https://huggingface.co/Seerat500/trialgpt-qwen2.5-0.5b-draft-lora}. Recorded application demonstration (with captions): \url{https://drive.google.com/file/d/169ev9q6hpA1AWPtlPccgV_qdr5nmnKFD/view?usp=sharing}.
 
 \begin{thebibliography}{10}
 \bibitem{trialgpt} Q.~Jin \emph{et al.}, ``Matching patients to clinical trials with large language models,'' \emph{Nature Communications}, vol.~15, 2024.
