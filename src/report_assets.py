@@ -24,8 +24,8 @@ ap.add_argument("--n_errors", type=int, default=12)
 A = ap.parse_args()
 FIG, GEN = os.path.join(A.report, "figures"), os.path.join(A.report, "generated")
 os.makedirs(FIG, exist_ok=True); os.makedirs(GEN, exist_ok=True)
-plt.rcParams.update({"font.size": 7, "axes.titlesize": 8, "axes.labelsize": 7, "legend.fontsize": 6.5,
-                     "xtick.labelsize": 6.5, "ytick.labelsize": 6.5, "figure.dpi": 150})
+plt.rcParams.update({"font.size": 5.5, "axes.titlesize": 5.5, "axes.labelsize": 5.5, "legend.fontsize": 5,
+                     "xtick.labelsize": 5, "ytick.labelsize": 5, "figure.dpi": 150})
 
 ABBR = {"included": "Incl", "not included": "NotIncl", "excluded": "Excl", "not excluded": "NotExcl",
         "not enough information": "NEI", "not applicable": "NA", "invalid": "Invalid"}
@@ -146,7 +146,7 @@ for split in ["val", "test"]:
             lines.append("\\midrule")
     write(f"perclass_{split}.tex", "\n".join(lines + ["\\bottomrule\\end{tabular}"]))
 
-    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.7))
+    fig, axes = plt.subplots(1, 2, figsize=(3.45, 1.9))
     for ax, ct in zip(axes, ["inclusion", "exclusion"]):
         cm = np.array(m[ct]["confusion_matrix"]["rows_gold_cols_pred"]); labels = [ABBR[l] for l in m[ct]["confusion_matrix"]["labels"]]
         norm = cm / np.maximum(cm.sum(1, keepdims=True), 1)
@@ -163,15 +163,15 @@ logs = [("1.5B v1 (final)", "train_log.json"), ("1.5B v2 (oversampled)", "train_
 logs = [(t, load(f)) for t, f in logs]
 logs = [(t, h) for t, h in logs if h]
 if logs:
-    fig, axes = plt.subplots(1, len(logs), figsize=(7.0, 2.2), squeeze=False)
+    fig, axes = plt.subplots(1, len(logs), figsize=(3.45, 1.75), squeeze=False)
     for ax, (title, h) in zip(axes[0], logs):
         tr = [(x["step"], x["loss"]) for x in h if "loss" in x and "eval_loss" not in x]
         ev = [(x["step"], x["eval_loss"]) for x in h if "eval_loss" in x]
         ax.plot(*zip(*tr), label="train loss", lw=1.2)
         ax.plot(*zip(*ev), "o-", label="validation loss", lw=1.2, ms=2.5)
         best = min(ev, key=lambda z: z[1]); ax.axvline(best[0], color="gray", ls=":", lw=0.8)
-        ax.set_yscale("log"); ax.set_xlabel("optimizer step"); ax.set_title(f"{title}\nbest val loss {best[1]:.4f} @ step {best[0]}")
-    axes[0][0].set_ylabel("loss (answer tokens)"); axes[0][0].legend()
+        ax.set_yscale("log"); ax.set_xlabel("optimizer step"); ax.set_title(f"{title}\nval {best[1]:.3f} @ step {best[0]}")
+    axes[0][0].set_ylabel("loss (answer tokens)"); axes[0][0].legend(loc="upper right", fontsize=4.5)
     plt.tight_layout(); savefig("train_curves.pdf")
 
 # ---------------------------------------------------------------- KV-cache benchmark
@@ -233,7 +233,7 @@ if ab:
         lines.append(f"{r['T']} & {r['ref_ms']:.2f} & {r['tiled_ms']:.2f} & {r['sdpa_ms']:.2f} & "
                      f"{r['ref_mem_MiB']:.1f} & {r['tiled_mem_MiB']:.1f} & {r['sdpa_mem_MiB']:.1f} \\\\")
     write("attn_bench.tex", "\n".join(lines + ["\\bottomrule\\end{tabular}"]))
-    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.3)); T = [r["T"] for r in R]
+    fig, axes = plt.subplots(1, 2, figsize=(3.45, 1.7)); T = [r["T"] for r in R]
     for key, lab in [("ref", "reference"), ("tiled", "tiled online-softmax"), ("sdpa", "PyTorch SDPA (fused)")]:
         axes[0].plot(T, [r[f"{key}_ms"] for r in R], "o-", label=lab, ms=3)
         axes[1].plot(T, [max(r[f"{key}_mem_MiB"], 0.01) for r in R], "o-", label=lab, ms=3)
