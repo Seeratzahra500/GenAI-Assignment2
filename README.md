@@ -52,3 +52,22 @@ Check each script's `--help` for the exact flags. Seeds: split 42, training 42. 
 * Speculative decoding was *slower* than plain KV-cache greedy decoding in our setting (see report); outputs are identical to the target's greedy output.
 * The app is an educational prototype, not a medical or enrolment decision tool. A public Gradio link only lives while the Kaggle session runs.
 * Parts of the code and report were written with AI assistance; see the AI-use appendix in the report.
+
+## Run the application locally (no Kaggle, no notebook)
+
+Requirements: Python 3.10+, git, about 10 GB free RAM (CPU) or a CUDA GPU with 6 GB+ VRAM, about 5 GB disk for the first download.
+
+```bash
+git clone https://github.com/Seeratzahra500/GenAI-Assignment2
+cd GenAI-Assignment2
+python -m venv .venv
+# Windows: .venv\Scripts\activate        Linux/macOS: source .venv/bin/activate
+pip install torch transformers peft accelerate gradio pandas
+python app/app.py
+```
+Then open **http://127.0.0.1:7860** in a browser. The first start downloads Qwen2.5-1.5B-Instruct, Qwen2.5-0.5B-Instruct and the two LoRA adapters from Hugging Face (`Seerat500/trialgpt-qwen2.5-1.5b-lora`, `Seerat500/trialgpt-qwen2.5-0.5b-draft-lora`); later starts use the cache.
+
+* With a GPU the app uses fp16 on CUDA. Without one it runs in float32 on the CPU: expect roughly 10-60 s per criterion. For a faster CPU demo use `python app/app.py --n_new 40`.
+* On CPU the benchmark tab shows peak GPU memory as empty/0 (no GPU); timing and speedups are still measured.
+* Options: `--port 7860`, `--host 0.0.0.0` (serve to other machines), `--share` (temporary public link), `--n_new` (max generated tokens).
+* Screening reports are written to `reports/` and offered for download in the app.
